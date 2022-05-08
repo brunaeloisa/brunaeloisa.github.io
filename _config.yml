@@ -29,11 +29,11 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
 github_username:  jekyll
 
+remote-theme: mdo/hyde
 # Build settings
 plugins:
   - jekyll-remote-theme
   - jekyll-feed
-remote-theme: mdo/hyde
 
 # Exclude from processing.
 # The following items will not be processed, by default.
