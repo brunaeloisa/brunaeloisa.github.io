@@ -29,10 +29,9 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
 github_username:  jekyll
 
-remote-theme: mdo/hyde
+theme: minima
 # Build settings
 plugins:
-  - jekyll-remote-theme
   - jekyll-feed
 
 # Exclude from processing.
