@@ -30,9 +30,10 @@ twitter_username: jekyllrb
 github_username:  jekyll
 
 # Build settings
-remote-theme: benbalter/retlab
 plugins:
+  - jekyll-remote-theme
   - jekyll-feed
+remote-theme: mdo/hyde
 
 # Exclude from processing.
 # The following items will not be processed, by default.
