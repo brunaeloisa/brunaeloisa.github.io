@@ -3,8 +3,13 @@ title: Processamento Digital de Imagens (DCA0445)
 layout: page
 ---
 
-Bruna Soares \<<brunaeloisa7@gmail.com>\>  
-André Varela \<<andre.varela.104@ufrn.edu.br>\>
+<nav class="toc-fixed" markdown="1">
+* TOC
+{:toc}
+</nav>
+
+Bruna Soares <brunaeloisa7@gmail.com>  
+André Varela <andre.varela.104@ufrn.edu.br>
 <hr><br>
 
 ## 1ª Unidade
@@ -16,6 +21,14 @@ André Varela \<<andre.varela.104@ufrn.edu.br>\>
 ![Imagem de entrada](imagens/biel.png)
 
 * Utilizando o programa exemplos/pixels.cpp como referência, implemente um programa trocaregioes.cpp. Seu programa deverá trocar os quadrantes em diagonal na imagem. Explore o uso da classe Mat e seus construtores para criar as regiões que serão trocadas. O efeito é ilustrado na Figura 5.
+
+~~~ python
+for i in range(min(p1x, p2x), max(p1x, p2x)+1):
+    for j in range(min(p1y, p2y), max(p1y, p2y)+1):
+        for k in range(canais):
+          img_neg[i,j,k] = 255 - img_neg[i,j,k]
+cv2_imshow(img_neg)
+~~~
 
 ### 3.2. Exercícios
 
