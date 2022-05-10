@@ -1,5 +1,5 @@
 ---
-title: PDI
+title: Processamento Digital de Imagens (DCA0445)
 layout: page
 ---
 
@@ -7,8 +7,9 @@ layout: page
 {:toc}
 
 # Processamento Digital de Imagens - DCA0445
-Bruna Soares <<brunaeloisa7@gmail.com\>>  
-André Varela <<andre.varela.104@ufrn.edu.br\>>
+
+Bruna Soares <<brunaeloisa7@gmail.com>>  
+André Varela <<andre.varela.104@ufrn.edu.br>>
 
 ## 1ª Unidade
 
