@@ -6,8 +6,9 @@ layout: page
 * TOC
 {:toc}
 
-Bruna Soares <<brunaeloisa7@gmail.com>>  
-André Varela <<andre.varela.104@ufrn.edu.br>>
+<hr>
+Bruna Soares <<brunaeloisa7@gmail.com>\>  
+André Varela <<andre.varela.104@ufrn.edu.br>\>
 
 ## 1ª Unidade
 
