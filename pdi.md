@@ -3,13 +3,11 @@ title: Processamento Digital de Imagens (DCA0445)
 layout: page
 ---
 
-<nav class="toc-fixed" markdown="1">
 * TOC
 {:toc}
-</nav>
 
-Bruna Soares <brunaeloisa7@gmail.com>  
-André Varela <andre.varela.104@ufrn.edu.br>
+Bruna Soares \<<brunaeloisa7@gmail.com>\>  
+André Varela \<<andre.varela.104@ufrn.edu.br>\>
 <hr><br>
 
 ## 1ª Unidade
