@@ -186,11 +186,29 @@ Obtemos, enfim, a seguinte saída: `A figura tem 7 bolhas com buracos e 14 bolha
 
 * Implementar um programa que deverá, para cada imagem capturada, realizar a equalização do histogram antes de exibir a imagem. Teste sua implementação apontando a câmera para ambientes com iluminações variadas e observando o efeito gerado. Assuma que as imagens processadas serão em tons de cinza.
 
+Para captura de imagens através de uma câmera (webcam), conversão em vídeo em escala de cinza e exibição, utilizamos a função `cv2.VideoCapture()`.
+
+[source,python]
+----
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+----
+
+Em segunda instância, parametrizamos o tamanho da tela de exibição _(513 x 480)_ e o intervalo de valores do histograma, 0 a 255.
+
+[source,python]
+----
+hist_size = 256
+hist_w, hist_h = 513, 480
+----
+
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py[equalize.py].
+
 
 * Implementar um programa que deverá continuamente calcular o histograma da imagem (apenas uma componente de cor é suficiente) e compará-lo com o último histograma calculado. Ative um alarme quando a diferença entre estes ultrapassar um limiar pré-estabelecido, utilizando a função de comparação que julgar conveniente.
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/motiondetector.py[motiondetector.py].
+
+image::https://media.giphy.com/media/7fbYTmL7hJeiqMxtQY/giphy.gif[]
 
 === 5.2. Exercícios
 
