@@ -193,7 +193,7 @@ Para captura de imagens através de uma câmera (webcam), utilizaremos a funçã
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 ----
 
-Em segunda instância, parametrizaremos o tamanho da tela de exibição em _(513 x 480)_ e o intervalo de valores _(0 a 255)_ do histograma.
+Em segunda instância, parametrizaremos o tamanho da tela de exibição em _(512 x 480)_ e o intervalo de valores _(0 a 255)_ do histograma.
 
 [source,python]
 ----
