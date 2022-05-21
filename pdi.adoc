@@ -209,7 +209,7 @@ frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 frame_eq = cv2.equalizeHist(frame)
 ----
 
-Como pode-se observar, os únicos argumentos são o frame original e o frame de saída (igualada).
+Como pode-se observar, os únicos argumentos são o frame original e o frame de saída (igualado).
 
 
 
