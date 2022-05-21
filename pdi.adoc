@@ -201,7 +201,14 @@ hist_size = 256
 hist_w, hist_h = 513, 480
 ----
 
-Converteremos cada frame original capturado em escala de cinza. Em sequência, aplicaremos a equalização do histograma com a função `cv.equalizeHist()`. O algoritmo normalizará o brilho e aumentará o contraste do frame.
+FAZER COMENTÁRIO 
+
+[source,python]
+----
+bin_w = int(round(hist_w/hist_size))
+----
+
+Converteremos cada frame original capturado em escala de cinza. Em sequência, aplicaremos a equalização do histograma com a função `cv.equalizeHist()`. O algoritmo normalizará o brilho e aumentará o contraste do frame. Para isso, aplicaremos um laço de repetição _while_, que realizará o processo enquanto for verdadeiro _(True)_, ou seja, não existir nenhuma condição de interrupção do programa.
 
 [source,python]
 ----
@@ -209,7 +216,17 @@ frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 frame_eq = cv2.equalizeHist(frame)
 ----
 
-Como pode-se observar, os únicos argumentos são o frame original (normal) e o frame de saída (equalizado).
+Como pode ser falcimento observado, os únicos argumentos são o frame original (normal) e o frame de saída (equalizado).
+
+O cálculo do histograma da imagem natural é dado pelo seguinte trecho:
+
+[source,python]
+----
+histImage = np.zeros((hist_h, hist_w), dtype=np.uint8)
+hist = cv2.calcHist([frame], [0], None, [hist_size], (0, 256)) 
+cv2.normalize(hist, hist, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)
+----
+
 
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py[equalize.py].
