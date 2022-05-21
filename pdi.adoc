@@ -92,7 +92,7 @@ Exibimos, então, o resultado armazenado em `img_trocada`, obtendo a figura fina
 .Troca de quadrantes em imagem sugerida
 image::https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/imagens/resultados/biel_trocada.png[]
 
-Como a logica do programa foi pensada para uma imagem genérica, aplicou-se uma figura colorida com dimensões de 814 x 543 pixels, a fim de verificar o seu funcionamento. O resultado é apresentado na Figura 5. 
+Como a lógica do programa foi pensada para uma imagem genérica, aplicou-se uma figura colorida com dimensões de 814 x 543 pixels, a fim de verificar o seu funcionamento. O resultado é apresentado na Figura 5. 
 
 O código completo pode ser encontrado em: link:https://colab.research.google.com/drive/1ghwXSluPaFaMzgWag3FUPPP_shLN1Ute?usp=sharing[trocaregioes.ipynb] (Google Colab).
 
@@ -103,6 +103,8 @@ image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/re
 
 ==== 3.2.1 Rotulação de objetos
 * Observando-se o programa link:https://agostinhobritojr.github.io/tutorial/pdi/exemplos/labeling.cpp[labeling.cpp] como exemplo, é possível verificar que caso existam mais de 255 objetos na cena, o processo de rotulação poderá ficar comprometido. Identifique a situação em que isso ocorre e proponha uma solução para este problema.
+
+Existe uma limitação de valores, em 255 tons de cinza distintos, em razão do tipo de variável que está sendo utilizada (_unsigned char_). A proposta de solução é utilizar uma variável do tipo _inteiro_ ou _float_ para aumentar o máximo valor de contabilização. Para além disso, pode-se adaptar o algoritmo para o sistema RGB, possibilitando 16581375 (255³) rótulos, que são diferenciáveis para a visão computacional.
 
 ==== 3.2.2 Contagem de objetos
 * Aprimore o algoritmo de contagem apresentado para identificar regiões com ou sem buracos internos que existam na cena. Assuma que objetos com mais de um buraco podem existir. Inclua suporte no seu algoritmo para não contar bolhas que tocam as bordas da imagem. Não se pode presumir, a priori, que elas tenham buracos ou não.
