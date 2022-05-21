@@ -186,20 +186,21 @@ Obtemos, enfim, a seguinte saída: `A figura tem 7 bolhas com buracos e 14 bolha
 
 * Implementar um programa que deverá, para cada imagem capturada, realizar a equalização do histogram antes de exibir a imagem. Teste sua implementação apontando a câmera para ambientes com iluminações variadas e observando o efeito gerado. Assuma que as imagens processadas serão em tons de cinza.
 
-Para captura de imagens através de uma câmera (webcam), conversão em vídeo em escala de cinza e exibição, utilizamos a função `cv2.VideoCapture()`.
+Para captura de imagens através de uma câmera (webcam), conversão em vídeo em escala de cinza e exibição, utilizaremos a função `cv2.VideoCapture()`.
 
 [source,python]
 ----
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 ----
 
-Em segunda instância, parametrizamos o tamanho da tela de exibição _(513 x 480)_ e o intervalo de valores do histograma, 0 a 255.
+Em segunda instância, parametrizaremos o tamanho da tela de exibição em _(513 x 480)_ e o intervalo de valores _(0 a 255)_ do histograma .
 
 [source,python]
 ----
 hist_size = 256
 hist_w, hist_h = 513, 480
 ----
+
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py[equalize.py].
 
