@@ -209,6 +209,8 @@ frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 frame_eq = cv2.equalizeHist(frame)
 ----
 
+
+
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py[equalize.py].
 
 
