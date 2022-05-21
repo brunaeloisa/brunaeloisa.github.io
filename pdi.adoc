@@ -208,7 +208,7 @@ FAZER COMENTÁRIO
 bin_w = int(round(hist_w/hist_size))
 ----
 
-Converteremos cada frame original capturado em escala de cinza. Em sequência, aplicaremos a equalização do histograma com a função `cv.equalizeHist()`. O algoritmo normalizará o brilho e aumentará o contraste do frame. Para isso, aplicaremos um laço de repetição _while_, que realizará o processo enquanto for verdadeiro _(True)_, ou seja, não existir nenhuma condição de interrupção do programa.
+Converteremos cada frame original capturado em escala de cinza. Em sequência, aplicaremos a equalização do histograma com a função `cv.equalizeHist()`. O algoritmo normalizará o brilho e aumentará o contraste do frame. Para isso, aplicaremos um laço de repetição `while`, que realizará o processo enquanto for verdadeiro (`True`), ou seja, não existir nenhuma condição de interrupção do programa.
 
 [source,python]
 ----
@@ -216,9 +216,7 @@ frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 frame_eq = cv2.equalizeHist(frame)
 ----
 
-Como pode ser falcimento observado, os únicos argumentos são o frame original (normal) e o frame de saída (equalizado).
-
-O cálculo do histograma da imagem natural é dado pelo seguinte trecho:
+Como pode ser falcimento observado, os únicos argumentos são o frame original (normal) e o frame de saída (equalizado). Após equalização dos tons de cinza, é feito o cálculo do historama para cada tom de cinza por meio da função `cv2.calcHist()`. 
 
 [source,python]
 ----
