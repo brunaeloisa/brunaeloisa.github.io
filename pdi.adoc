@@ -216,11 +216,10 @@ frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 frame_eq = cv2.equalizeHist(frame)
 ----
 
-Como pode ser falcimento observado, os únicos argumentos são o frame original (normal) e o frame de saída (equalizado). Após equalização dos tons de cinza, é feito o cálculo do historama para cada tom de cinza por meio da função `cv2.calcHist()`. 
+Como pode ser falcimento observado, os únicos argumentos são o frame original (normal) e o frame de saída (equalizado), com o mesmo tamanho e tipo do frame original. Após equalização dos tons de cinza, é feito o cálculo do historama para cada tom de cinza por meio da função `cv2.calcHist()`. Depois disso, normalizaremos os histogramas gerados.
 
 [source,python]
 ----
-histImage = np.zeros((hist_h, hist_w), dtype=np.uint8)
 hist = cv2.calcHist([frame], [0], None, [hist_size], (0, 256)) 
 cv2.normalize(hist, hist, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)
 ----
