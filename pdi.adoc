@@ -239,7 +239,7 @@ for i in range(hist_size):
 
 Exibimos, assim, a captura gerada pela _webcam_ e seu histograma:
 
-.Captura da webcam
+.Captura original da webcam 
 image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/normal.png?raw=true[]
 
 Após a aplicação da equalização com o nosso programa, geramos o seguinte resultado:
@@ -247,8 +247,9 @@ Após a aplicação da equalização com o nosso programa, geramos o seguinte re
 .Captura equalizada
 image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/equalizado.png?raw=true[]
 
-O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py[equalize.py].
+Nota-se que como a captura foi realizada em um ambiente com boa iluminação, o histograma se encontra concentrado em uma região mais clara. Após equalização, nota-se uma distribuiçao mais uniforme das intensidades dos pixels na imagem gerada. 
 
+O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py[equalize.py].
 
 * Implementar um programa que deverá continuamente calcular o histograma da imagem (apenas uma componente de cor é suficiente) e compará-lo com o último histograma calculado. Ative um alarme quando a diferença entre estes ultrapassar um limiar pré-estabelecido, utilizando a função de comparação que julgar conveniente.
 
