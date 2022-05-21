@@ -20,7 +20,7 @@ laplacian_gauss = np.array([[0,0,1,0,0], [0,1,2,1,0], [1,2,-16,2,1], [0,1,2,1,0]
 
 print("\nMENU\n\n'a' - módulo\n'm' - média\n'g' - filtro gaussiano\n'h' - detector de bordas horizontais\n\
 'v' - detector de bordas verticais\n'l' - filtro laplaciano\n'f' - filtro laplaciano do gaussiano\n'b' - boost\
-\nesc - encerrar programa\n")
+\n's' - salvar imagem instantânea\nesc - encerrar programa\n")
 
 mask = np.float32(media)
 absolut = True
@@ -62,3 +62,5 @@ while(True):
     mask = np.float32(boost)
   elif key == ord('f'):
     mask = np.float32(laplacian_gauss)
+  elif key == ord('s'):
+    cv2.imwrite('filtered_img.png', filtro_espacial)
