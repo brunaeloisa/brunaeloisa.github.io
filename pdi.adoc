@@ -34,7 +34,7 @@ Extraímos, então, as dimensões da imagem e o número de canais utilizando o a
 altura, largura, canais = img_orig.shape
 ----
 
-Na sequência, solicitamos ao usuário as coordenadas dos pontos de interesse stem:[P_1] e stem:[P_2]. A partir das coordenadas fornecidas, percorremos os pixels que compõem o retângulo entre esses dois pontos, invertendo os tons de todos os canais.
+Na sequência, solicitamos ao usuário as coordenadas dos pontos de interesse P1 e P2. A partir das coordenadas fornecidas, percorremos os pixels que compõem o retângulo entre esses dois pontos, invertendo os tons de todos os canais.
 
 [source,python]
 ----
@@ -44,7 +44,7 @@ for i in range(min(p1x, p2x), max(p1x, p2x)+1):
           img_neg[i,j,k] = 255 - img_neg[i,j,k]
 ----
 
-Para exibir o resultado, precisou-se utilizar a função `cv2_imshow()`, a qual é a versão compatível com o Colab de `cv2.imshow()`. O resultado final para a Figura 1 como entrada, considerando os pontos stem:[P_1]=(90, 190) e  stem:[P_2]=(220, 120) está exposto na Figura 2.
+Para exibir o resultado, precisou-se utilizar a função `cv2_imshow()`, a qual é a versão compatível com o Google Colab de `cv2.imshow()`. O resultado final para a Figura 1 como entrada, considerando os pontos P1=(90, 190) e  P2=(220, 120) está exposto na Figura 2.
 
 .Região negativa em imagem sugerida
 image::https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/imagens/resultados/biel_neg.png[]
@@ -101,37 +101,110 @@ image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/re
 
 === 3.2. Exercícios
 
+==== 3.2.1 Rotulação de objetos
 * Observando-se o programa link:https://agostinhobritojr.github.io/tutorial/pdi/exemplos/labeling.cpp[labeling.cpp] como exemplo, é possível verificar que caso existam mais de 255 objetos na cena, o processo de rotulação poderá ficar comprometido. Identifique a situação em que isso ocorre e proponha uma solução para este problema.
 
+==== 3.2.2 Contagem de objetos
 * Aprimore o algoritmo de contagem apresentado para identificar regiões com ou sem buracos internos que existam na cena. Assuma que objetos com mais de um buraco podem existir. Inclua suporte no seu algoritmo para não contar bolhas que tocam as bordas da imagem. Não se pode presumir, a priori, que elas tenham buracos ou não.
 
-O código completo pode ser encontrado em: link:https://colab.research.google.com/drive/175pYEI1FJgY0VtlEIYgVshcSJIbQJx40?usp=sharing[labeling.ipynb] (Google Colab).
+Como devemos levar em consideração que podem existir bolhas com mais de um buraco, a imagem a ser utilizada como base para este código é mostrada na Figura 6.
+
+.Entrada do programa
+image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/bolhas_modif.png?raw=true[]
+
+Inicialmente, lê-se o arquivo e as dimensões da imagem. Logo após, percorremos todos os pixels de borda, aplicando um _flood fill_ da cor do fundo (tom 0) sempre que nos depararmos com um pixel branco no percurso.
+
+[source,python]
+----
+for i in range(altura): 
+    if img_aux[i,0] == 255:
+        cv2.floodFill(img_aux, None, (0,i), 0)
+        num_bolhas_borda += 1 
+    if img_aux[i,largura-1] == 255:
+        cv2.floodFill(img_aux, None, (largura-1,i), 0)
+        num_bolhas_borda += 1 
+for j in range(largura): 
+    if img_aux[0,j] == 255:
+        cv2.floodFill(img_aux, None, (j,0), 0)
+        num_bolhas_borda += 1 
+    if img_aux[altura-1,j] == 255:
+        cv2.floodFill(img_aux, None, (j,altura-1), 0)
+        num_bolhas_borda += 1  
+----
+
+A variável `num_bolhas_borda` armazena o número de bolhas que foram excluídas da figura e é incrementada sempre que chamamos a função `cv2.floodFill()`. A nova imagem, dada por `img_aux`, é mostrada na Figura 7.
+
+.Imagem sem bolhas de borda
+image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas1.png?raw=true[]
+
+Na sequência, faremos o _labeling_ das bolhas presentes na nova imagem. Para isso, percorremos todos os pixels da figura, procurando novamente os pixels brancos. Ao encontrar uma nova bolha, incrementamos a variável `num_bolhas` e aplicamos o _flood fill_ com o tom correspondente ao valor atual do contador.
+
+[source,python]
+----
+num_bolhas = 0
+for i in range(altura): 
+    for j in range(largura):
+      if img_aux[i,j] == 255:
+        num_bolhas += 1
+        cv2.floodFill(img_aux, None, (j,i), num_bolhas)
+----
+
+Ao fim deste processo, conheceremos a quantidade total de bolhas e cada uma delas estará sendo representada por um tom de cinza diferente, como exposto na Figura 8.
+
+.Labeling das bolhas
+image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas2.png?raw=true[]
+
+Para realizar a contagem das bolhas com buracos, iniciamos pintando o fundo de branco, aplicando um _flood fill_ no ponto (0,0), de modo que apenas os buracos apresentem tom de cinza 0.
+
+.Alteração da cor de fundo
+image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas3.png?raw=true[]
+
+Varremos novamente a figura, dessa vez buscando os pixels pretos e aplicando neles um _flood fill_ com a cor do fundo. Verificamos, então, o pixel anterior: caso este seja diferente de 220, incrementamos a variável `num_bolhas_buracos` e pintamos a bolha que contém o buraco em questão com o tom de cinza 220; caso contrário, temos que a bolha já foi contabilizada.
+
+[source,python]
+----
+num_bolhas_buracos = 0
+for i in range(1, altura): 
+    for j in range(1, largura):
+      if img_aux[i,j] == 0:
+        cv2.floodFill(img_aux, None, (j,i), 255)
+        if img_aux[i,j-1] != 220:
+          cv2.floodFill(img_aux, None, (j-1,i), 220)
+          num_bolhas_buracos += 1
+----
+
+O trecho de código acima garantirá que nenhuma bolha seja contabilizada mais de uma vez e fará com que as bolhas com buracos fiquem destacadas na figura, como vemos abaixo.
+
+.Indentificação das bolhas com buracos
+image::https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas4.png?raw=true[]
+
+Obtemos, enfim, a seguinte saída: `A figura tem 7 bolhas com buracos e 14 bolhas sem buracos`. O código completo pode ser encontrado em: link:https://colab.research.google.com/drive/175pYEI1FJgY0VtlEIYgVshcSJIbQJx40?usp=sharing[labeling.ipynb] (Google Colab).
 
 === 4.2. Exercícios
 
-* Utilizando o programa exemplos/histogram.cpp como referência, implemente um programa equalize.cpp. Este deverá, para cada imagem capturada, realizar a equalização do histogram antes de exibir a imagem. Teste sua implementação apontando a câmera para ambientes com iluminações variadas e observando o efeito gerado. Assuma que as imagens processadas serão em tons de cinza.
+* Implementar um programa que deverá, para cada imagem capturada, realizar a equalização do histogram antes de exibir a imagem. Teste sua implementação apontando a câmera para ambientes com iluminações variadas e observando o efeito gerado. Assuma que as imagens processadas serão em tons de cinza.
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py[equalize.py].
 
-* Utilizando o programa exemplos/histogram.cpp como referência, implemente um programa motiondetector.cpp. Este deverá continuamente calcular o histograma da imagem (apenas uma componente de cor é suficiente) e compará-lo com o último histograma calculado. Quando a diferença entre estes ultrapassar um limiar pré-estabelecido, ative um alarme. Utilize uma função de comparação que julgar conveniente.
+* Implementar um programa que deverá continuamente calcular o histograma da imagem (apenas uma componente de cor é suficiente) e compará-lo com o último histograma calculado. Ative um alarme quando a diferença entre estes ultrapassar um limiar pré-estabelecido, utilizando a função de comparação que julgar conveniente.
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/motiondetector.py[motiondetector.py].
 
 === 5.2. Exercícios
 
-* Utilizando o programa exemplos/filtroespacial.cpp como referência, implemente um programa laplgauss.cpp. O programa deverá acrescentar mais uma funcionalidade ao exemplo fornecido, permitindo que seja calculado o laplaciano do gaussiano das imagens capturadas. Compare o resultado desse filtro com a simples aplicação do filtro laplaciano.
+* Utilizando o programa link:https://agostinhobritojr.github.io/tutorial/pdi/exemplos/filtroespacial.cpp[filtroespacial.cpp] como referência, implementar um programa que acrescente mais uma funcionalidade ao exemplo fornecido, permitindo que seja calculado o laplaciano do gaussiano das imagens capturadas. Compare o resultado desse filtro com a simples aplicação do filtro laplaciano.
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/laplgauss.py[laplgauss.py].
 
 === 6.1. Exercícios
 
-* Utilizando o programa exemplos/addweighted.cpp como referência, implemente um programa tiltshift.cpp. Três ajustes deverão ser providos na tela da interface:
+* Utilizando o programa link:https://agostinhobritojr.github.io/tutorial/pdi/exemplos/addweighted.cpp[addweighted.cpp] como referência, implementar um programa no qual três ajustes deverão ser providos na tela da interface:
 - um ajuste para regular a altura da região central que entrará em foco;
 - um ajuste para regular a força de decaimento da região borrada;
 - um ajuste para regular a posição vertical do centro da região que entrará em foco. Finalizado o programa, a imagem produzida deverá ser salva em arquivo.
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/tiltshift.py[tiltshift.py].
 
-* Utilizando o programa exemplos/addweighted.cpp como referência, implemente um programa tiltshiftvideo.cpp. Tal programa deverá ser capaz de processar um arquivo de vídeo, produzir o efeito de tilt-shift nos quadros presentes e escrever o resultado em outro arquivo de vídeo. A ideia é criar um efeito de miniaturização de cenas. Descarte quadros em uma taxa que julgar conveniente para evidenciar o efeito de stop motion, comum em vídeos desse tipo.
+* Implementar um programa capaz de processar um arquivo de vídeo, produzir o efeito de _tilt-shift_ nos quadros presentes e escrever o resultado em outro arquivo de vídeo. A ideia é criar um efeito de miniaturização de cenas. Descarte quadros em uma taxa que julgar conveniente para evidenciar o efeito de _stop motion_, comum em vídeos desse tipo.
 
 O código completo pode ser encontrado em: link:https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/tiltshiftvideo.py[tiltshiftvideo.py].
