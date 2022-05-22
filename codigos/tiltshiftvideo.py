@@ -1,74 +1,115 @@
 import cv2
 import numpy as np
 
-def on_trackbar_line(val):
-    global l1, l2
-    
-    slider_altura = cv2.getTrackbarPos('altura', 'Padrao') # altura da região central
-    slider_centro = cv2.getTrackbarPos('centro', 'Padrao') # posição vertical do centro
-    slider_decaimento = cv2.getTrackbarPos('decaimento', 'Padrao') # intensidade de decaimento
 
-    faixa = slider_altura*height/100
-    
-    aux1 = slider_centro - int(slider_altura/2)
-    aux2 = slider_centro + int(slider_altura/2)
+def on_trackbar(val):
+    global l1, l2, alpha
 
-    if aux1 >= 0 and aux2 <= 100:
-        l1 = aux1*height/100
-        l2 = aux2*height/100
-    
-    aux = frame1.copy()
-    cv2.rectangle(aux, (0,int(l1)), (width,int(l2)), (0,0,0), 2)
-   
+    slider_altura = cv2.getTrackbarPos(
+        'altura', 'Tiltshift')  # altura da região central
+    slider_centro = cv2.getTrackbarPos(
+        'centro', 'Tiltshift')  # posição vertical do centro
+    slider_decaimento = cv2.getTrackbarPos(
+        'decaimento', 'Tiltshift')  # intensidade de decaimento
+
+    tmp1 = slider_centro - int(slider_altura/2)
+    tmp2 = slider_centro + int(slider_altura/2)
+
+    if tmp1 >= 0 and tmp2 <= 100:
+        l1 = tmp1*height/100
+        l2 = tmp2*height/100
+
     x = np.arange(height, dtype=np.float32)
-    alpha = (np.tanh((x - l1) / (slider_decaimento + 0.001)) - np.tanh((x - l2) / (slider_decaimento + 0.001))) / 2
-    
+    alpha = (np.tanh((x - l1) / (slider_decaimento + 0.001)) -
+             np.tanh((x - l2) / (slider_decaimento + 0.001))) / 2
+
+    aux = tiltshift(frame1, frame2)
+    cv2.imshow('Tiltshift', aux)
+
+
+def tiltshift(frame1, frame2):
+    img = frame1.copy()
+    cv2.rectangle(img, (0, int(l1)), (width, int(l2)), (0, 0, 0), 2)
+
     for i, element in enumerate(alpha):
-        aux[i] = cv2.addWeighted(frame1[i], element, frame2[i], 1 - element, 0.0)
-    
-    cv2.imshow('Padrao', aux)
+        img[i] = cv2.addWeighted(
+            frame1[i], element, frame2[i], 1 - element, 0.0)
+
+    return img
+
+
+def salvarvideo(video):
+    taxa = 15
+    descarta = 0
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter('video_tiltshift.mp4', fourcc, 12, (width, height))
+
+    cap = cv2.VideoCapture(video)
+
+    while True:
+        ret, frame1 = cap.read()
+        if ret:
+            if descarta == 0:
+                frame2 = frame1.copy()
+
+                # aplica borramento
+                frame_32f = np.float32(frame2)
+                for _ in range(5):
+                    frame_32f = cv2.filter2D(frame_32f, -1, mask)
+                frame2 = np.uint8(frame_32f)
+
+                novo_frame = tiltshift(frame1, frame2)
+                out.write(novo_frame)
+
+                descarta += 1
+                descarta = descarta % taxa
+            else:
+                descarta += 1
+                descarta = descarta % taxa
+        else:
+            break
+
+    out.release()
+    print("Vídeo salvo como video_tiltshift.mp4")
+
 
 l1, l2 = 0, 0
 slider_padrao = 0
 slider_max = 100
-mask = np.repeat(0.04,25).reshape(5,5) 
+mask = np.repeat(0.04, 25).reshape(5, 5)
+arq_video = 'teste.mp4'
 
-cv2.namedWindow('Padrao')
-cap = cv2.VideoCapture('praia.mp4')
+cap = cv2.VideoCapture(arq_video)
 
-height, width = 480, 720
+# lê primeiro frame para ajustar parâmetros do tilt-shift
+_, frame1 = cap.read()
 
-cv2.createTrackbar('altura', 'Padrao', slider_padrao, slider_max, on_trackbar_line)
-cv2.createTrackbar('centro', 'Padrao', slider_padrao, slider_max, on_trackbar_line)
-cv2.createTrackbar('decaimento', 'Padrao', slider_padrao, slider_max, on_trackbar_line)
+height, width = frame1.shape[:-1]
 
-taxa = 5
-descarta = 0
+alpha = np.zeros(height, dtype=np.float32)
 
-while True:
-    ret, frame1 = cap.read()
-    frame1 = cv2.resize(frame1, (width, height))
-    frame2 = frame1.copy()
-    if ret:
-        if descarta == 0:
-            frame_32f = np.float32(frame2)
-            for n in range(5):
-                frame_32f = cv2.filter2D(frame_32f, -1, mask)
-            frame2 = np.uint8(frame_32f)
+frame1 = cv2.resize(frame1, (width, height))
+frame2 = frame1.copy()
 
-            on_trackbar_line(0)
+cv2.namedWindow('Tiltshift')
+cv2.createTrackbar('altura', 'Tiltshift', slider_padrao,
+                   slider_max, on_trackbar)
+cv2.createTrackbar('centro', 'Tiltshift', slider_padrao,
+                   slider_max, on_trackbar)
+cv2.createTrackbar('decaimento', 'Tiltshift',
+                   slider_padrao, slider_max, on_trackbar)
 
-            descarta += 1
-            descarta = descarta % taxa
-        else:
-            descarta += 1
-            descarta = descarta % taxa
-    else:
-        print("Erro na captura do frame.")
-        break
+frame_32f = np.float32(frame2)
+for n in range(5):
+    frame_32f = cv2.filter2D(frame_32f, -1, mask)
+frame2 = np.uint8(frame_32f)
 
-    key = cv2.waitKey(15)
-    if key == 27:
-        break
+on_trackbar(0)
 
-cv2.destroyAllWindows()
+k = cv2.waitKey(0)
+if k == 27:
+    cv2.destroyAllWindows()
+elif k == ord('s'):
+    salvarvideo(arq_video)
+    cv2.destroyAllWindows()
