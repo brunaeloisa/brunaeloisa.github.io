@@ -1,16 +1,12 @@
 import cv2
 import numpy as np
 
-
 def on_trackbar(val):
     global l1, l2, alpha
 
-    slider_altura = cv2.getTrackbarPos(
-        'altura', 'Tiltshift')  # altura da região central
-    slider_centro = cv2.getTrackbarPos(
-        'centro', 'Tiltshift')  # posição vertical do centro
-    slider_decaimento = cv2.getTrackbarPos(
-        'decaimento', 'Tiltshift')  # intensidade de decaimento
+    slider_altura = cv2.getTrackbarPos('altura', 'Tiltshift')  # altura da região central
+    slider_centro = cv2.getTrackbarPos('centro', 'Tiltshift')  # posição vertical do centro
+    slider_decaimento = cv2.getTrackbarPos('decaimento', 'Tiltshift')  # intensidade de decaimento
 
     tmp1 = slider_centro - int(slider_altura/2)
     tmp2 = slider_centro + int(slider_altura/2)
@@ -20,13 +16,12 @@ def on_trackbar(val):
         l2 = tmp2*height/100
 
     x = np.arange(height, dtype=np.float32)
-    alpha = (np.tanh((x - l1) / (slider_decaimento + 0.001)) -
-             np.tanh((x - l2) / (slider_decaimento + 0.001))) / 2
+    alpha = (np.tanh((x - l1) / (slider_decaimento + 0.001)) - np.tanh((x - l2) / (slider_decaimento + 0.001))) / 2
 
     aux = tiltshift(frame1, frame2)
     cv2.imshow('Tiltshift', aux)
 
-
+    
 def tiltshift(frame1, frame2):
     img = frame1.copy()
     cv2.rectangle(img, (0, int(l1)), (width, int(l2)), (0, 0, 0), 2)
@@ -93,12 +88,9 @@ frame1 = cv2.resize(frame1, (width, height))
 frame2 = frame1.copy()
 
 cv2.namedWindow('Tiltshift')
-cv2.createTrackbar('altura', 'Tiltshift', slider_padrao,
-                   slider_max, on_trackbar)
-cv2.createTrackbar('centro', 'Tiltshift', slider_padrao,
-                   slider_max, on_trackbar)
-cv2.createTrackbar('decaimento', 'Tiltshift',
-                   slider_padrao, slider_max, on_trackbar)
+cv2.createTrackbar('altura', 'Tiltshift', slider_padrao, slider_max, on_trackbar)
+cv2.createTrackbar('centro', 'Tiltshift', slider_padrao, slider_max, on_trackbar)
+cv2.createTrackbar('decaimento', 'Tiltshift', slider_padrao, slider_max, on_trackbar)
 
 frame_32f = np.float32(frame2)
 for n in range(5):
