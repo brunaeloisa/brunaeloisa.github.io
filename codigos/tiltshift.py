@@ -22,8 +22,7 @@ def on_trackbar(val):
 
     x = np.arange(height, dtype=np.float32)
 
-    alpha = 0.5 * (np.tanh((x - l1)/(slider_decaimento+0.001)) -
-                   np.tanh((x - l2)/(slider_decaimento+0.001)))
+    alpha = 0.5 * (np.tanh((x - l1)/(slider_decaimento+0.001)) - np.tanh((x - l2)/(slider_decaimento+0.001)))
 
     for i, element in enumerate(alpha):
         aux[i] = cv2.addWeighted(img1[i], element, img2[i], 1 - element, 0.0)
@@ -48,7 +47,7 @@ cv2.createTrackbar('centro', 'Tiltshift', slider_inicial, slider_max, on_trackba
 cv2.createTrackbar('decaimento', 'Tiltshift', slider_inicial, slider_max, on_trackbar)
 
 img_32f = np.float32(img2)
-for n in range(3):
+for n in range(5):
     img_32f = cv2.filter2D(img_32f, -1, mask)
 img2 = np.uint8(img_32f)
 
