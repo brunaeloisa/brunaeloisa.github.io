@@ -1,15 +1,21 @@
 import cv2 
 import numpy as np
+import sys
 
 inicio = True
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 if not cap.isOpened():
-  print("Erro ao abrir a câmera.")
-
+    print("Erro ao abrir a câmera.")
+    sys.exit() # encerra o programa
+  
 while True:
-    _, frame = cap.read()
+    ret, frame = cap.read()
 
+    if not ret:
+        print("Erro na captura do frame.")
+        break
+    
     bgr = cv2.split(frame) # separa os canais da imagem
     
     hist_size = 256
@@ -22,8 +28,8 @@ while True:
     cv2.normalize(hist_atual, hist_atual, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)
     
     if inicio:
-      hist_anterior = hist_atual.copy() 
-      inicio = False
+        hist_anterior = hist_atual.copy() 
+        inicio = False
 
     for i in range(hist_size):
         cv2.line(histImage, (bin_w*i, hist_h - int(hist_atual[i])),
@@ -32,7 +38,7 @@ while True:
 
     dif = cv2.compareHist(hist_anterior, hist_atual, cv2.HISTCMP_BHATTACHARYYA) # cv2.HISTCMP_BHATTACHARYYA retorna 0.0 para imagens iguais
     if (100 * dif > 3):
-      cv2.putText(frame, "Movimento detectado!", (10, 30), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 255))
+        cv2.putText(frame, "Movimento detectado!", (10, 30), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 255))
     
     cv2.imshow('frame', frame)
     cv2.imshow('histograma', histImage)
