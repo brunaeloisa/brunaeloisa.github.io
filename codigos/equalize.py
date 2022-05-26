@@ -1,10 +1,12 @@
 import cv2 
 import numpy as np
+import sys
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 if not (cap.isOpened()):
-  print("Erro ao abrir a câmera.")
+    print("Erro ao abrir a câmera.")
+    sys.exit()
 
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
@@ -13,7 +15,11 @@ hist_w, hist_h = 513, height
 bin_w = int(round(hist_w/hist_size))
 
 while(True):
-    _, frame = cap.read()
+    ret, frame = cap.read()
+    
+    if not ret:
+        print("Erro na captura do frame.")
+        break
     
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
     frame_eq = cv2.equalizeHist(frame)
