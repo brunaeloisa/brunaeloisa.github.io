@@ -74,7 +74,7 @@ l1, l2 = 0, 0
 slider_padrao = 0
 slider_max = 100
 mask = np.repeat(0.04, 25).reshape(5, 5)
-arq_video = 'teste.mp4'
+arq_video = 'video.mp4'
 
 cap = cv2.VideoCapture(arq_video)
 
