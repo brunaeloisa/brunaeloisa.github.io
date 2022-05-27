@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import sys
 
 def on_trackbar(val):
     global l1, l2, alpha
@@ -78,7 +79,11 @@ arq_video = 'teste.mp4'
 cap = cv2.VideoCapture(arq_video)
 
 # lê primeiro frame para ajustar parâmetros do tilt-shift
-_, frame1 = cap.read()
+ret, frame1 = cap.read()
+
+if not ret:
+    print("Erro na captura do frame.")
+    sys.exit()
 
 height, width = frame1.shape[:-1]
 
