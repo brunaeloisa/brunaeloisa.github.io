@@ -35,7 +35,7 @@ slider_inicial = 0
 slider_max = 100
 mask = np.repeat(0.04, 25).reshape(5, 5)
 
-img1 = cv2.imread('cidade.jpg', cv2.IMREAD_COLOR)
+img1 = cv2.imread('estacionamento.jpg', cv2.IMREAD_COLOR)
 height, width = img1.shape[:-1]
 
 img2 = img1.copy()
