@@ -80,3 +80,4 @@ while(True):
     mask = np.float32(gauss)
   elif key == ord('s'):
     cv2.imwrite('filtered_img.png', filtro_espacial)
+    print("Imagem salva em filtered_img.png")
