@@ -25,7 +25,6 @@ def on_trackbar(val):
     
 def tiltshift(frame1, frame2):
     img = frame1.copy()
-    cv2.rectangle(img, (0, int(l1)), (width, int(l2)), (0, 0, 0), 2)
 
     for i, element in enumerate(alpha):
         img[i] = cv2.addWeighted(
