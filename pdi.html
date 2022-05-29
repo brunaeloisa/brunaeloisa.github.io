@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.17">
-<meta name="author" content="Bruna Soares, André Varela">
+<meta name="author" content="André Varela, Bruna Soares">
 <title>Processamento Digital de Imagens (DCA0445)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -442,14 +442,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Processamento Digital de Imagens (DCA0445)</h1>
 <div class="details">
-<span id="author" class="author">Bruna Soares</span><br>
-<span id="email" class="email"><a href="mailto:brunaeloisa7@gmail.com" data-href="mailto:brunaeloisa7@gmail.com">brunaeloisa7@gmail.com</a></span><br>
-<span id="author2" class="author">André Varela</span><br>
-<span id="email2" class="email"><a href="mailto:andre.varela.104@ufrn.edu.br" data-href="mailto:andre.varela.104@ufrn.edu.br">andre.varela.104@ufrn.edu.br</a></span><br>
+<span id="author" class="author">André Varela</span><br>
+<span id="email" class="email"><a href="mailto:andre.varela.104@ufrn.edu.br" data-href="mailto:andre.varela.104@ufrn.edu.br">andre.varela.104@ufrn.edu.br</a></span><br>
+<span id="author2" class="author">Bruna Soares</span><br>
+<span id="email2" class="email"><a href="mailto:brunaeloisa7@gmail.com" data-href="mailto:brunaeloisa7@gmail.com">brunaeloisa7@gmail.com</a></span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Sumário</div>
 <ul class="sectlevel1">
+<li><a href="#_sobre_o_opencv">Sobre o OpenCV</a></li>
 <li><a href="#_1ª_unidade">1ª Unidade</a>
 <ul class="sectlevel2">
 <li><a href="#_2_2_exercícios">2.2. Exercícios</a>
@@ -488,48 +489,56 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1 data-line-10">
+<h2 id="_sobre_o_opencv">Sobre o OpenCV</h2>
+<div class="sectionbody">
+<div class="paragraph data-line-12">
+<p>Para a execução dos códigos citados nesta página foi utilizado o OpenCV (<em>Open Source Computer Vision</em>), que é uma biblioteca <em>open-source</em> muito usada em aplicações de visão computacional, processamento de imagens e vídeos. Na linguagem Python, esta biblioteca possui uma boa integração com o módulo numérico NumPy, o qual oferece suporte para criação de matrizes multi-dimensionais e um amplo leque de funções para manipulação de <em>arrays</em>. Nas versões mais recentes do OpenCV, esses objetos <code>ndarray</code> já são utilizados nativamente como uma forma de otimização.</p>
+</div>
+</div>
+</div>
+<div class="sect1 data-line-14">
 <h2 id="_1ª_unidade">1ª Unidade</h2>
 <div class="sectionbody">
-<div class="sect2 data-line-12">
+<div class="sect2 data-line-16">
 <h3 id="_2_2_exercícios">2.2. Exercícios</h3>
-<div class="sect3 data-line-14">
+<div class="sect3 data-line-18">
 <h4 id="_2_2_1_região_negativa">2.2.1 Região negativa</h4>
-<div class="ulist data-line-15">
+<div class="ulist data-line-19">
 <ul>
-<li class="data-line-15">
+<li class="data-line-19">
 <p>Implementar um programa capaz de solicitar ao usuário as coordenadas de dois pontos P1 e P2 localizados dentro dos limites do tamanho da imagem e exibir que lhe for fornecida. Entretanto, a região definida pelo retângulo de vértices opostos definidos pelos pontos P1 e P2 será exibida com o negativo da imagem na região correspondente.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-17">
+<div class="paragraph data-line-21">
 <p>A imagem utilizada como base está sendo mostrada na Figura 1.</p>
 </div>
-<div class="imageblock data-line-20">
+<div class="imageblock data-line-24">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/biel.png?raw=true" alt="biel">
 </div>
 <div class="title">Figure 1. biel.png</div>
 </div>
-<div class="paragraph data-line-22">
+<div class="paragraph data-line-26">
 <p>Apesar da imagem em questão ser representada em tons de cinza, a solução deste exercício foi pensada para uma imagem genérica e, portanto, optamos por ler a imagem em matrizes de cores utilizando a flag <code>cv2.IMREAD_COLOR</code>.</p>
 </div>
-<div class="listingblock data-line-25">
+<div class="listingblock data-line-29">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">img_orig = cv2.imread('biel.png', cv2.IMREAD_COLOR)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-29">
+<div class="paragraph data-line-33">
 <p>Extraímos, então, as dimensões da imagem e o número de canais utilizando o atributo <code>shape</code>.</p>
 </div>
-<div class="listingblock data-line-32">
+<div class="listingblock data-line-36">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">altura, largura, canais = img_orig.shape</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-36">
+<div class="paragraph data-line-40">
 <p>Na sequência, solicitamos ao usuário as coordenadas dos pontos de interesse P1 e P2. A partir das coordenadas fornecidas, percorremos os pixels que compõem o retângulo entre esses dois pontos, invertendo os tons de todos os canais.</p>
 </div>
-<div class="listingblock data-line-39">
+<div class="listingblock data-line-43">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">for i in range(min(p1x, p2x), max(p1x, p2x)+1):
     for j in range(min(p1y, p2y), max(p1y, p2y)+1):
@@ -537,41 +546,41 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             img_neg[i,j,k] = 255 - img_neg[i,j,k]</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-46">
-<p>Para exibir o resultado, precisou-se utilizar a função <code>cv2_imshow()</code>, a qual é a versão compatível com o Google Colab de <code>cv2.imshow()</code>. O resultado final para a Figura 1 como entrada, considerando os pontos P1=(90, 190) e  P2=(220, 120) está exposto na Figura 2.</p>
+<div class="paragraph data-line-50">
+<p>Para exibir o resultado, precisou-se utilizar a função <code>cv2_imshow()</code>, a qual é uma versão compatível com o Google Colab de <code>cv2.imshow()</code>. O resultado final tomando-se a Figura 1 como entrada e considerando os pontos P1=(90, 190) e P2=(220, 120) está exposto na Figura 2.</p>
 </div>
-<div class="imageblock data-line-49">
+<div class="imageblock data-line-53">
 <div class="content">
 <img src="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/imagens/resultados/biel_neg.png" alt="biel neg">
 </div>
 <div class="title">Figure 2. Região negativa em imagem sugerida</div>
 </div>
-<div class="paragraph data-line-51">
+<div class="paragraph data-line-55">
 <p>Aplicando como entrada uma imagem colorida, obtivemos o seguinte resultado.</p>
 </div>
-<div class="imageblock data-line-54">
+<div class="imageblock data-line-58">
 <div class="content">
 <img src="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/imagens/resultados/beatles_neg.png" alt="beatles neg">
 </div>
 <div class="title">Figure 3. Região negativa em imagem colorida</div>
 </div>
-<div class="paragraph data-line-56">
+<div class="paragraph data-line-60">
 <p>O código completo pode ser encontrado em: <a href="https://colab.research.google.com/drive/1HbbkbGeCsXm69APovGH_G45kqMRLekx1?usp=sharing" data-href="https://colab.research.google.com/drive/1HbbkbGeCsXm69APovGH_G45kqMRLekx1?usp=sharing">regions.ipynb</a> (Google Colab).</p>
 </div>
 </div>
-<div class="sect3 data-line-58">
+<div class="sect3 data-line-62">
 <h4 id="_2_2_2_troca_de_quadrantes">2.2.2 Troca de quadrantes</h4>
-<div class="ulist data-line-59">
+<div class="ulist data-line-63">
 <ul>
-<li class="data-line-59">
+<li class="data-line-63">
 <p>Implementar um programa que troque os quadrantes em diagonal na imagem.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-61">
-<p>Da mesma forma do exercício anterior, lemos a imagem e extraímos os seus dados essenciais. Vale ressaltar que para que a troca dos quadrantes seja possível as dimensões da imagem devem ser pares. Adicionamos, portanto, duas condicionais: caso uma das duas dimensões da imagem seja ímpar, descartaremos a última linha e/ou coluna do <em>array</em>.</p>
+<div class="paragraph data-line-65">
+<p>Da mesma forma que o exercício anterior, lemos a imagem e extraímos os seus dados essenciais. Vale ressaltar que para que a troca dos quadrantes seja possível as dimensões da imagem devem ser pares. Adicionamos, portanto, duas condicionais: caso uma das duas dimensões da imagem seja ímpar, descartaremos a última linha e/ou coluna do <em>array</em>.</p>
 </div>
-<div class="listingblock data-line-64">
+<div class="listingblock data-line-68">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">if altura % 2 != 0:
     altura -= 1
@@ -581,13 +590,13 @@ if largura % 2 != 0:
     img_orig = img_orig[::,:-1]</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-73">
-<p>Em seguida, calculamos a metade das dimensões para uso posterior e criamos um novo array para armazenar a imagem trocada.</p>
+<div class="paragraph data-line-77">
+<p>Em seguida, calculamos a metade das dimensões para uso posterior e criamos um novo <em>array</em> para armazenar a imagem trocada.</p>
 </div>
-<div class="paragraph data-line-75">
-<p>Por fim, invertemos os quadrantes da figura selecionando as regiões da imagem de origem e atribuindo-as às suas novas posições utilizando <em>slicing</em> de <em>arrays</em>, como mostra o trecho abaixo.</p>
+<div class="paragraph data-line-79">
+<p>Por fim, invertemos os quadrantes da figura selecionando as regiões da imagem de origem e atribuindo-as às suas novas posições utilizando <em>slicing</em> de <em>arrays</em>, como mostra o trecho de código abaixo.</p>
 </div>
-<div class="listingblock data-line-78">
+<div class="listingblock data-line-82">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python"># quarto quadrante = segundo quadrante
 img_trocada[meia_altura:,meia_largura:] = img_orig[:meia_altura,:meia_largura]
@@ -599,66 +608,66 @@ img_trocada[:meia_altura,meia_largura:] = img_orig[meia_altura:,:meia_largura]
 img_trocada[:meia_altura,:meia_largura] = img_orig[meia_altura:,meia_largura:]</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-89">
-<p>Exibimos, então, o resultado armazenado em <code>img_trocada</code>, obtendo a figura final, como pode ser visto abaixo.</p>
+<div class="paragraph data-line-93">
+<p>Exibimos, então, o resultado armazenado em <code>img_trocada</code>, obtendo a figura final, como pode ser visto a seguir.</p>
 </div>
-<div class="imageblock data-line-92">
+<div class="imageblock data-line-96">
 <div class="content">
 <img src="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/imagens/resultados/biel_trocada.png" alt="biel trocada">
 </div>
 <div class="title">Figure 4. Troca de quadrantes em imagem sugerida</div>
 </div>
-<div class="paragraph data-line-94">
+<div class="paragraph data-line-98">
 <p>Como a lógica do programa foi pensada para uma imagem genérica, aplicou-se uma figura colorida com dimensões de 814 x 543 pixels, a fim de verificar o seu funcionamento. O resultado é apresentado na Figura 5.</p>
 </div>
-<div class="paragraph data-line-96">
-<p>O código completo pode ser encontrado em: <a href="https://colab.research.google.com/drive/1ghwXSluPaFaMzgWag3FUPPP_shLN1Ute?usp=sharing" data-href="https://colab.research.google.com/drive/1ghwXSluPaFaMzgWag3FUPPP_shLN1Ute?usp=sharing">trocaregioes.ipynb</a> (Google Colab).</p>
-</div>
-<div class="imageblock data-line-99">
+<div class="imageblock data-line-101">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/lago_trocada.png?raw=true" alt="lago trocada">
 </div>
 <div class="title">Figure 5. Troca de quadrantes em imagem colorida</div>
 </div>
+<div class="paragraph data-line-103">
+<p>O código completo pode ser encontrado em: <a href="https://colab.research.google.com/drive/1ghwXSluPaFaMzgWag3FUPPP_shLN1Ute?usp=sharing" data-href="https://colab.research.google.com/drive/1ghwXSluPaFaMzgWag3FUPPP_shLN1Ute?usp=sharing">trocaregioes.ipynb</a> (Google Colab).</p>
 </div>
 </div>
-<div class="sect2 data-line-101">
+</div>
+<div class="sect2 data-line-105">
 <h3 id="_3_2_exercícios">3.2. Exercícios</h3>
-<div class="sect3 data-line-103">
+<div class="sect3 data-line-107">
 <h4 id="_3_2_1_rotulação_de_objetos">3.2.1 Rotulação de objetos</h4>
-<div class="ulist data-line-104">
+<div class="ulist data-line-108">
 <ul>
-<li class="data-line-104">
+<li class="data-line-108">
 <p>Observando-se o programa <a href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/labeling.cpp" data-href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/labeling.cpp">labeling.cpp</a> como exemplo, é possível verificar que caso existam mais de 255 objetos na cena, o processo de rotulação poderá ficar comprometido. Identifique a situação em que isso ocorre e proponha uma solução para este problema.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-106">
-<p>Existe uma limitação de valores em 255 tons de cinza distintos, em razão do tipo de variável que está sendo utilizada (<code>unsigned char</code>). A proposta de solução é utilizar uma variável do tipo <code>int</code> ou <code>float</code> para aumentar o máximo valor de contabilização. Para além disso, pode-se adaptar o algoritmo para o sistema RGB, possibilitando a criação de 255³ rótulos, que são diferenciáveis para a visão computacional.</p>
+<div class="paragraph data-line-110">
+<p>Existe uma limitação de valores em 255 tons de cinza distintos em razão do tipo de variável que está sendo utilizada (<code>unsigned char</code>). A proposta de solução é utilizar uma matriz do tipo <code>int</code> ou <code>float</code> para aumentar as possibilidades de contabilização. Para além disso, poderíamos também adaptar o algoritmo para o sistema RGB, possibilitando a criação de 255³ rótulos, que são diferenciáveis na visão computacional.</p>
 </div>
 </div>
-<div class="sect3 data-line-108">
+<div class="sect3 data-line-112">
 <h4 id="_3_2_2_contagem_de_objetos">3.2.2 Contagem de objetos</h4>
-<div class="ulist data-line-109">
+<div class="ulist data-line-113">
 <ul>
-<li class="data-line-109">
+<li class="data-line-113">
 <p>Aprimore o algoritmo de contagem apresentado para identificar regiões com ou sem buracos internos que existam na cena. Assuma que objetos com mais de um buraco podem existir. Inclua suporte no seu algoritmo para não contar bolhas que tocam as bordas da imagem. Não se pode presumir, a priori, que elas tenham buracos ou não.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-111">
+<div class="paragraph data-line-115">
 <p>Como devemos levar em consideração que podem existir bolhas com mais de um buraco, a imagem a ser utilizada como base para este código é mostrada na Figura 6.</p>
 </div>
-<div class="imageblock data-line-114">
+<div class="imageblock data-line-118">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/bolhas_modif.png?raw=true" alt="bolhas modif">
 </div>
 <div class="title">Figure 6. Entrada do programa</div>
 </div>
-<div class="paragraph data-line-116">
+<div class="paragraph data-line-120">
 <p>Inicialmente, lê-se o arquivo e as dimensões da imagem. Logo após, percorremos todos os pixels de borda, aplicando um <em>flood fill</em> da cor do fundo (tom 0) sempre que nos depararmos com um pixel branco no percurso.</p>
 </div>
-<div class="listingblock data-line-119">
+<div class="listingblock data-line-123">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">for i in range(altura):
     if img_aux[i,0] == 255:
@@ -676,19 +685,19 @@ for j in range(largura):
         num_bolhas_borda += 1</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-136">
+<div class="paragraph data-line-140">
 <p>A variável <code>num_bolhas_borda</code> armazena o número de bolhas que foram excluídas da figura e é incrementada sempre que chamamos a função <code>cv2.floodFill()</code>. A nova imagem, dada por <code>img_aux</code>, é mostrada na Figura 7.</p>
 </div>
-<div class="imageblock data-line-139">
+<div class="imageblock data-line-143">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas1.png?raw=true" alt="bolhas1">
 </div>
 <div class="title">Figure 7. Imagem sem bolhas de borda</div>
 </div>
-<div class="paragraph data-line-141">
-<p>Na sequência, faremos o <em>labeling</em> das bolhas presentes na nova imagem. Para isso, percorremos todos os pixels da figura, procurando novamente os pixels brancos. Ao encontrar uma nova bolha, incrementamos a variável <code>num_bolhas</code> e aplicamos o <em>flood fill</em> com o tom correspondente ao valor atual do contador.</p>
+<div class="paragraph data-line-145">
+<p>Na sequência, faremos o <em>labeling</em> das bolhas presentes na nova imagem. Para isso, percorremos todos os pixels da figura, procurando novamente por pixels brancos. Ao encontrarmos uma nova bolha, incrementamos a variável <code>num_bolhas</code> e aplicamos o <em>flood fill</em> com o tom correspondente ao valor atual do contador.</p>
 </div>
-<div class="listingblock data-line-144">
+<div class="listingblock data-line-148">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">num_bolhas = 0
 for i in range(altura):
@@ -698,28 +707,28 @@ for i in range(altura):
             cv2.floodFill(img_aux, None, (j,i), num_bolhas)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-153">
+<div class="paragraph data-line-157">
 <p>Ao fim deste processo, conheceremos a quantidade total de bolhas e cada uma delas estará sendo representada por um tom de cinza diferente, como exposto na Figura 8.</p>
 </div>
-<div class="imageblock data-line-156">
+<div class="imageblock data-line-160">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas2.png?raw=true" alt="bolhas2">
 </div>
 <div class="title">Figure 8. Labeling das bolhas</div>
 </div>
-<div class="paragraph data-line-158">
+<div class="paragraph data-line-162">
 <p>Para realizar a contagem das bolhas com buracos, iniciamos pintando o fundo de branco, aplicando um <em>flood fill</em> no ponto (0,0), de modo que apenas os buracos apresentem tom de cinza 0.</p>
 </div>
-<div class="imageblock data-line-161">
+<div class="imageblock data-line-165">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas3.png?raw=true" alt="bolhas3">
 </div>
 <div class="title">Figure 9. Alteração da cor de fundo</div>
 </div>
-<div class="paragraph data-line-163">
-<p>Varremos novamente a figura, dessa vez buscando os pixels pretos e aplicando neles um <em>flood fill</em> com a cor do fundo. Verificamos, então, o pixel anterior: caso este seja diferente de 220, incrementamos a variável <code>num_bolhas_buracos</code> e pintamos a bolha que contém o buraco em questão com o tom de cinza 220; caso contrário, temos que a bolha já foi contabilizada.</p>
+<div class="paragraph data-line-167">
+<p>Varremos novamente a figura, dessa vez buscando os pixels pretos e aplicando neles um <em>flood fill</em> com a cor do fundo. Verificamos, então, o pixel antecedente: caso este seja diferente de 220, incrementamos a variável <code>num_bolhas_buracos</code> e pintamos a bolha que contém o buraco em questão com o tom de cinza 220; caso contrário, temos que a bolha já foi contabilizada.</p>
 </div>
-<div class="listingblock data-line-166">
+<div class="listingblock data-line-170">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">num_bolhas_buracos = 0
 for i in range(1, altura):
@@ -731,70 +740,70 @@ for i in range(1, altura):
                 num_bolhas_buracos += 1</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-177">
+<div class="paragraph data-line-181">
 <p>O trecho de código acima garantirá que nenhuma bolha seja contabilizada mais de uma vez e fará com que as bolhas com buracos fiquem destacadas na figura, como vemos abaixo.</p>
 </div>
-<div class="imageblock data-line-180">
+<div class="imageblock data-line-184">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/bolhas4.png?raw=true" alt="bolhas4">
 </div>
 <div class="title">Figure 10. Indentificação das bolhas com buracos</div>
 </div>
-<div class="paragraph data-line-182">
+<div class="paragraph data-line-186">
 <p>Obtemos, enfim, a seguinte saída: <code>A figura tem 7 bolhas com buracos e 14 bolhas sem buracos</code>. O código completo pode ser encontrado em: <a href="https://colab.research.google.com/drive/175pYEI1FJgY0VtlEIYgVshcSJIbQJx40?usp=sharing" data-href="https://colab.research.google.com/drive/175pYEI1FJgY0VtlEIYgVshcSJIbQJx40?usp=sharing">labeling.ipynb</a> (Google Colab).</p>
 </div>
 </div>
 </div>
-<div class="sect2 data-line-184">
+<div class="sect2 data-line-188">
 <h3 id="_4_2_exercícios">4.2. Exercícios</h3>
-<div class="sect3 data-line-186">
+<div class="sect3 data-line-190">
 <h4 id="_4_2_1_equalização_de_histograma">4.2.1 Equalização de histograma</h4>
-<div class="ulist data-line-187">
+<div class="ulist data-line-191">
 <ul>
-<li class="data-line-187">
+<li class="data-line-191">
 <p>Implementar um programa que deverá, para cada imagem capturada, realizar a equalização do histograma antes de exibir a imagem. Teste sua implementação apontando a câmera para ambientes com iluminações variadas e observando o efeito gerado. Assuma que as imagens processadas serão em tons de cinza.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-189">
-<p>Para captura de imagens através de uma câmera (webcam), utilizaremos a função <code>cv2.VideoCapture()</code>.</p>
+<div class="paragraph data-line-193">
+<p>Para realizar a captura de imagens através de uma câmera (<em>webcam</em>), utilizamos a função <code>cv2.VideoCapture()</code>.</p>
 </div>
-<div class="listingblock data-line-192">
+<div class="listingblock data-line-196">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-196">
-<p>Em segunda instância, parametrizaremos o tamanho da tela de exibição em <em>(512 x 480)</em> e o número de tonalidades em 256, com valores entre 0 e 255 (o segundo valor de <code>hist_range</code> é <em>exclusive</em>).</p>
+<div class="paragraph data-line-200">
+<p>Em segunda instância, definimos o tamanho da tela de exibição como <em>(512 x 480)</em> e o número de tonalidades como 256, podendo apresentar valores de 0 a 255 (o segundo valor de <code>hist_range</code> é <em>exclusive</em>).</p>
 </div>
-<div class="listingblock data-line-199">
+<div class="listingblock data-line-203">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">hist_size = 256
 hist_w, hist_h = 512, 480
 hist_range = (0, 256)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-205">
+<div class="paragraph data-line-209">
 <p>O parâmetro <code>bin_w</code> define a largura ocupada por cada tom de cinza no histograma.</p>
 </div>
-<div class="listingblock data-line-208">
+<div class="listingblock data-line-212">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">bin_w = int(round(hist_w/hist_size))</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-212">
-<p>Converteremos cada frame original capturado em escala de cinza. Em sequência, aplicaremos a equalização do histograma com a função <code>cv.equalizeHist()</code>. O algoritmo normalizará o brilho e aumentará o contraste do frame. Para isso, aplicaremos um laço de repetição <code>while</code>, que realizará o processo enquanto for verdadeiro (<code>True</code>), ou seja, não existir nenhuma condição de interrupção do programa.</p>
+<div class="paragraph data-line-216">
+<p>Na sequência, convertemos cada frame capturado para escala de cinza e realizamos a equalização com a função <code>cv.equalizeHist()</code>. A partir de agora, os processos ocorrerão em <em>loop</em> para todos os frames coletados em tempo real enquanto não existir uma condição de interrupção do programa.</p>
 </div>
-<div class="listingblock data-line-215">
+<div class="listingblock data-line-219">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 frame_eq = cv2.equalizeHist(frame)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-220">
-<p>Como pode ser falcimente observado, os únicos argumentos são o frame original (normal) e o frame de saída (equalizado), com o mesmo tamanho e tipo do frame original. Após a equalização dos tons de cinza, faremos o cálculo do histograma para cada tom de cinza por meio da função <code>cv2.calcHist()</code>. Depois disso, normalizaremos os histogramas gerados com a função <code>cv2.normalize()</code>.</p>
+<div class="paragraph data-line-224">
+<p>Após a equalização dos tons de cinza, faremos o cálculo do histograma por meio da função <code>cv2.calcHist()</code> empregando os parâmetros previamente definidos como argumentos. Depois disso, normalizaremos os histogramas gerados com a função <code>cv2.normalize()</code>.</p>
 </div>
-<div class="listingblock data-line-223">
+<div class="listingblock data-line-227">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">hist = cv2.calcHist([frame], [0], None, [hist_size], hist_range)
 cv2.normalize(hist, hist, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)
@@ -803,155 +812,251 @@ hist_eq = cv2.calcHist([frame_eq], [0], None, [hist_size], hist_range)
 cv2.normalize(hist_eq, hist_eq, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-231">
-<p>Com isso, varreremos todo o histograma (normal e equalizado), desenhando um conjunto de linhas (representação de um trem de pulsos) para gerar a quantidade de pixels de cada tom de cinza do frame.</p>
+<div class="paragraph data-line-235">
+<p>Com isso, criamos um conjunto de barras verticais (representação de um trem de pulsos), que partem do eixo horizontal e vão até o ponto do valor calculado, a fim de representar a quantidade de pixels de cada tom de cinza do frame.</p>
 </div>
-<div class="listingblock data-line-234">
+<div class="listingblock data-line-238">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">for i in range(hist_size):
     cv2.line(histImage, (bin_w*i, hist_h - int(hist[i])), (bin_w*i, hist_h), 255, thickness=2)
     cv2.line(histImage_eq, (bin_w*i, hist_h - int(hist_eq[i])), (bin_w*i, hist_h), 255, thickness=2)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-240">
-<p>Exibimos, assim, a captura gerada pela <em>webcam</em> e seu histograma:</p>
+<div class="paragraph data-line-244">
+<p>Exibimos, então, a captura gerada pela <em>webcam</em> e o seu histograma:</p>
 </div>
-<div class="imageblock data-line-243">
+<div class="imageblock data-line-247">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/normal.png?raw=true" alt="normal">
 </div>
 <div class="title">Figure 11. Captura original da webcam</div>
 </div>
-<div class="paragraph data-line-245">
+<div class="paragraph data-line-249">
 <p>Após a aplicação da equalização com o nosso programa, geramos o seguinte resultado:</p>
 </div>
-<div class="imageblock data-line-248">
+<div class="imageblock data-line-252">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/equalizado.png?raw=true" alt="equalizado">
 </div>
 <div class="title">Figure 12. Captura equalizada</div>
 </div>
-<div class="paragraph data-line-250">
-<p>Nota-se que como a captura foi realizada em um ambiente com boa iluminação, o histograma se encontra concentrado em uma região mais clara. Após equalização, percebemos uma distribuiçao mais uniforme das intensidades dos pixels na imagem gerada.</p>
+<div class="paragraph data-line-254">
+<p>Nota-se que, como a captura foi realizada em um ambiente com boa iluminação, o histograma se encontra concentrado em uma região mais clara. Após equalização, percebemos uma distribuiçao mais uniforme das intensidades dos pixels na imagem gerada e um melhor constraste.</p>
 </div>
-<div class="paragraph data-line-252">
+<div class="paragraph data-line-256">
 <p>Para apreciar melhor os resultados da equalização, vamos introduzir uma imagem com pouco contraste, sendo a captura realizada em local com baixa iluminação. Note que os pixels estão agrupados, predominantemente, no lado mais a esquerda do histograma.</p>
 </div>
-<div class="imageblock data-line-255">
+<div class="imageblock data-line-259">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/normal_escuro.png?raw=true" alt="normal escuro">
 </div>
 <div class="title">Figure 13. Captura original da webcam em ambiente de baixa iluminação</div>
 </div>
-<div class="paragraph data-line-257">
-<p>Abaixo visualizamos o resultado da equalização e do novo histograma obtido. Apesar de conseguirmos visualizar melhor alguns detalhes da imagem, no escuro, o ruído está cada vez mais presente.</p>
+<div class="paragraph data-line-261">
+<p>Abaixo visualizamos o resultado da equalização e do novo histograma obtido. Verifica-se uma clara redistribuição dos pixels imagem por todo o histograma.</p>
 </div>
-<div class="imageblock data-line-260">
+<div class="paragraph data-line-263">
+<p>Apesar de conseguirmos visualizar melhor alguns detalhes da imagem equalizada em comparação com a imagem escura, o ruído está muito presente.</p>
+</div>
+<div class="imageblock data-line-266">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/equalizado_escuro.png?raw=true" alt="equalizado escuro">
 </div>
 <div class="title">Figure 14. Captura equalizada em ambiente de baixa iluminação</div>
 </div>
-<div class="paragraph data-line-262">
+<div class="paragraph data-line-268">
 <p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/equalize.py">equalize.py</a>.</p>
 </div>
 </div>
-<div class="sect3 data-line-264">
+<div class="sect3 data-line-270">
 <h4 id="_4_2_2_detector_de_movimento">4.2.2 Detector de movimento</h4>
-<div class="ulist data-line-265">
+<div class="ulist data-line-271">
 <ul>
-<li class="data-line-265">
+<li class="data-line-271">
 <p>Implementar um programa que deverá continuamente calcular o histograma da imagem (apenas uma componente de cor é suficiente) e compará-lo com o último histograma calculado. Ative um alarme quando a diferença entre estes ultrapassar um limiar pré-estabelecido, utilizando a função de comparação que julgar conveniente.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-267">
-<p>O programa utiliza alterações no histograma dos frames do vídeo capturado para detecção de movimentos. Com uma estrutura semelhante ao do algoritmo anterior, nesse projeto, calcularemos, para cada frame, o histograma da componente vermelha e compararemos essa com a do histograma anteriormente gerado. Precisamos, inicialmente, separar os canais da imagem:</p>
+<div class="paragraph data-line-273">
+<p>Este programa utiliza as alterações no histograma dos frames do vídeo capturado para detecção de movimentos. Partindo de uma estrutura semelhante ao do algoritmo anterior, calcularemos, para cada frame, o histograma da componente vermelha e o compararemos com o histograma que o antecedeu.</p>
 </div>
-<div class="listingblock data-line-270">
+<div class="paragraph data-line-275">
+<p>Precisamos, inicialmente, separar os canais da imagem:</p>
+</div>
+<div class="listingblock data-line-278">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">bgr = cv2.split(frame)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-274">
+<div class="paragraph data-line-282">
 <p>Assim, calculamos e normalizamos o histograma atual do canal vermelho.</p>
 </div>
-<div class="listingblock data-line-277">
+<div class="listingblock data-line-285">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">hist_atual = cv2.calcHist(bgr, [2], None, [hist_size], hist_range)
 cv2.normalize(hist_atual, hist_atual, alpha=0, beta=hist_h, norm_type=cv2.NORM_MINMAX)</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-282">
-<p>Para a condição inicial em que não temos um frame anterior para comparação, inicializamos uma variável <code>inicio = True</code> e atribuimos a variável <code>hist_anterior</code> o valor do histograma atual que está sendo gerado. Este histograma será o primeiro de referência.</p>
+<div class="paragraph data-line-290">
+<p>Para a condição inicial em que não temos um frame anterior para comparação, inicializamos uma variável <code>inicio = True</code> e atribuímos a <code>hist_anterior</code> o histograma atual que está sendo gerado. Terminada esta ação, a variável <code>inicio</code> passa a ser <code>False</code>.</p>
 </div>
-<div class="listingblock data-line-285">
+<div class="listingblock data-line-293">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">if inicio:
     hist_anterior = hist_atual.copy()
     inicio = False</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-291">
-<p>A diferença entre cada tom é calculada, atráves da função <code>compareHist()</code>, e inserida na varivável <code>dif</code>, retornando o quão o histograma do frame atual é semelhante com do frame anterior. <code>cv2.HISTCMP_BHATTACHARYYA</code> retorna 0.0 para imagens iguais. A partir disso, compararemos essa distinção ao limiar <em>(3)</em>. Quando este é ultrapassado, uma mensagem de <code>Movimento detectado!</code> é exibida na imagem.</p>
+<div class="paragraph data-line-299">
+<p>Os histogramas são comparados por meio da função <code>compareHist()</code> e o resultado é inserido na varivável <code>dif</code>, que representa o quanto o histograma do frame atual difere do anterior. Para tal, utilizamos a métrica <code>cv2.HISTCMP_BHATTACHARYYA</code>, a qual retorna valores entre 0.0 e 1.0, em que quanto mais próximo de 0.0, maior é a semelhança entre as imagens.</p>
 </div>
-<div class="listingblock data-line-294">
+<div class="paragraph data-line-301">
+<p>A partir disso, comparamos o valor encontrado (em %) ao limiar, que foi definido como 3 após alguns testes para alcançar a sensibilidade desejada. Quando este é ultrapassado, uma mensagem de <code>Movimento detectado !</code> é exibida na imagem.</p>
+</div>
+<div class="listingblock data-line-304">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">dif = cv2.compareHist(hist_anterior, hist_atual, cv2.HISTCMP_BHATTACHARYYA)
     if (100 * dif &gt; 3):
         cv2.putText(frame, "Movimento detectado!", (10, 30), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 0, 255))</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-300">
+<div class="paragraph data-line-310">
 <p>O resultado pode ser observado abaixo:</p>
 </div>
-<div class="imageblock data-line-303">
+<div class="imageblock data-line-313">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/motiondetector.gif?raw=true" alt="motiondetector">
 </div>
 <div class="title">Figure 15. Detecção de movimento</div>
 </div>
-<div class="paragraph data-line-305">
+<div class="paragraph data-line-315">
 <p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/motiondetector.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/motiondetector.py">motiondetector.py</a>.</p>
 </div>
 </div>
 </div>
-<div class="sect2 data-line-307">
+<div class="sect2 data-line-317">
 <h3 id="_5_2_exercícios">5.2. Exercícios</h3>
-<div class="sect3 data-line-309">
+<div class="sect3 data-line-319">
 <h4 id="_5_2_1_laplaciano_do_gaussiano">5.2.1 Laplaciano do gaussiano</h4>
-<div class="ulist data-line-310">
+<div class="ulist data-line-320">
 <ul>
-<li class="data-line-310">
+<li class="data-line-320">
 <p>Utilizando o programa <a href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/filtroespacial.cpp" data-href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/filtroespacial.cpp">filtroespacial.cpp</a> como referência, implementar um programa que acrescente mais uma funcionalidade ao exemplo fornecido, permitindo que seja calculado o laplaciano do gaussiano das imagens capturadas. Compare o resultado desse filtro com a simples aplicação do filtro laplaciano.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-312">
-<p><em>Em construção&#8230;&#8203;</em></p>
+<div class="paragraph data-line-322">
+<p>Inicialmente, adaptamos o código citado no exercício para a linguagem Python. Nele, o usuário pode escolher o efeito (módulo, média, gaussiano, bordas horizontais, bordas verticais, laplaciano e <em>boost</em>) que deseja aplicar às imagens capturadas em tempo real por meio das teclas do teclado.</p>
 </div>
-<div class="paragraph data-line-314">
+<div class="listingblock data-line-325">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">key = cv2.waitKey(10)
+
+if key == 27:
+    break
+elif key == ord('a'):
+    absolut = not absolut
+  elif key == ord('m'):
+    laplacian_gauss = False
+    mask = np.float32(media)
+  elif key == ord('g'):
+    laplacian_gauss = False
+    mask = np.float32(gauss)
+  elif key == ord('h'):
+    laplacian_gauss = False
+    mask = np.float32(horizontal)
+  elif key == ord('v'):
+    laplacian_gauss = False
+    mask = np.float32(vertical)
+  elif key == ord('l'):
+    laplacian_gauss = False
+    mask = np.float32(laplacian)
+  elif key == ord('b'):
+    laplacian_gauss = False
+    mask = np.float32(boost)
+  elif key == ord('f'):
+    laplacian_gauss = True
+    mask = np.float32(gauss)
+  elif key == ord('s'):
+    cv2.imwrite('filtered_img.png', filtro_espacial)
+    print("Imagem salva em filtered_img.png")</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-358">
+<p>Nota-se que foram adicionadas duas novas funcionalidades ao programa: o filtro laplaciano do gaussiano e o salvamento em arquivo do frame atual com filtro aplicado.</p>
+</div>
+<div class="paragraph data-line-360">
+<p>Para realizar o laplaciano do gaussiano, foi criada uma <em>flag</em> (<code>laplacian_gauss</code>) que retorna <code>True</code> quando o comando (tecla <em>f</em>) é ativado. Dessa forma, primeiramente selecionamos a máscara adequada para aplicar o filtro gaussiano e, em seguida, criamos uma expressão condicional baseada na <em>flag</em> em questão a fim de aplicar o laplaciano em cima da imagem já filtrada previamente.</p>
+</div>
+<div class="listingblock data-line-363">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+frame_gray = cv2.flip(frame_gray, 1)
+
+frame_32f = np.float32(frame_gray)
+filtered_frame = cv2.filter2D(frame_32f, -1, mask)
+
+if laplacian_gauss:
+    filtered_frame = cv2.filter2D(filtered_frame, -1, laplacian)</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-374">
+<p>Quando outras opções de filtro são escolhidas, a variável <code>laplacian_gauss</code> é setada para <code>False</code> e, portanto, nenhum processo adicional é realizado no frame.</p>
+</div>
+<div class="paragraph data-line-376">
+<p>Na sequência, verificamos se os valores mostrados devem ser absolutos ou não e transformamos os dados da matriz resultante que representa a imagem final em valores <code>unsigned</code> de 8 bits (0 a 255), para, só então, exibí-la em uma janela, assim como a imagem original.</p>
+</div>
+<div class="listingblock data-line-379">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">if absolut:
+    filtered_frame = np.abs(filtered_frame)
+
+filtro_espacial = np.uint8(filtered_frame)
+
+cv2.imshow('imagem original', frame_gray)
+cv2.imshow('imagem com efeito', filtro_espacial)</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-389">
+<p>Para comparar os efeitos do filtro laplaciano e laplaciano do gaussiano, utilizamos como entrada do programa a imagem exposta a seguir.</p>
+</div>
+<div class="imageblock data-line-392">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/livro.png?raw=true" alt="livro">
+</div>
+<div class="title">Figure 16. Imagem utilizada no programa</div>
+</div>
+<div class="paragraph data-line-394">
+<p>O comparativo entre os dois resultados é mostrado na Figura 17. Percebe-se que, ao aplicarmos o filtro gaussiano, que realiza um borramento, antes do laplaciano, atenuamos os ruídos da imagem tornando as bordas mais precisas na figura resultante, dando a impressão de uma imagem mais escura.</p>
+</div>
+<div class="imageblock data-line-397">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/laplgauss_livro.png?raw=true" alt="laplgauss livro">
+</div>
+<div class="title">Figure 17. Comparativo entre os filtros laplaciano e laplaciano do gaussiano</div>
+</div>
+<div class="paragraph data-line-399">
 <p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/laplgauss.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/laplgauss.py">laplgauss.py</a>.</p>
 </div>
 </div>
 </div>
-<div class="sect2 data-line-316">
+<div class="sect2 data-line-401">
 <h3 id="_6_1_exercícios">6.1. Exercícios</h3>
-<div class="sect3 data-line-318">
+<div class="sect3 data-line-403">
 <h4 id="_6_1_1_tilt_shift_em_imagem">6.1.1 <em>Tilt-shift</em> em imagem</h4>
-<div class="ulist data-line-319">
+<div class="ulist data-line-404">
 <ul>
-<li class="data-line-319">
+<li class="data-line-404">
 <p>Utilizando o programa <a href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/addweighted.cpp" data-href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/addweighted.cpp">addweighted.cpp</a> como referência, implementar um programa no qual três ajustes deverão ser providos na tela da interface:</p>
-<div class="ulist data-line-320">
+<div class="ulist data-line-405">
 <ul>
-<li class="data-line-320">
+<li class="data-line-405">
 <p>um ajuste para regular a altura da região central que entrará em foco;</p>
 </li>
-<li class="data-line-321">
+<li class="data-line-406">
 <p>um ajuste para regular a força de decaimento da região borrada;</p>
 </li>
-<li class="data-line-322">
+<li class="data-line-407">
 <p>um ajuste para regular a posição vertical do centro da região que entrará em foco. Finalizado o programa, a imagem produzida deverá ser salva em arquivo.</p>
 </li>
 </ul>
@@ -959,26 +1064,220 @@ cv2.normalize(hist_atual, hist_atual, alpha=0, beta=hist_h, norm_type=cv2.NORM_M
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-324">
-<p><em>Em construção&#8230;&#8203;</em></p>
+<div class="paragraph data-line-409">
+<p>Para este código, inicialmente lemos a imagem de entrada do programa, armazenando-a na variável <code>img1</code>. Em seguida, a <code>img2</code> é obtida aplicando-se cinco vezes o filtro da média com máscara 5x5 na imagem original, a fim de alcançar um efeito de borramento com intensidade desejável.</p>
 </div>
-<div class="paragraph data-line-326">
+<div class="listingblock data-line-412">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">img_32f = np.float32(img2)
+for n in range(5):
+    img_32f = cv2.filter2D(img_32f, -1, mask)
+img2 = np.uint8(img_32f)</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-419">
+<p>Criamos a janela e também as barras de ajuste solicitadas no exercício utilizando a função <code>cv2.createTrackbar()</code>, definindo um <em>slider</em> que inicia em 0 e pode ir até 100. Um dos parâmetros exigidos para esta criação é uma função de <em>callback</em>, a qual será chamada sempre que o usuário interagir com a barra de rolagem.</p>
+</div>
+<div class="listingblock data-line-422">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">cv2.namedWindow('Tiltshift')
+cv2.createTrackbar('altura', 'Tiltshift', slider_inicial, slider_max, on_trackbar)
+cv2.createTrackbar('centro', 'Tiltshift', slider_inicial, slider_max, on_trackbar)
+cv2.createTrackbar('decaimento', 'Tiltshift', slider_inicial, slider_max, on_trackbar)</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-429">
+<p>Ao chamar o <em>callback</em>, a função apresentada acima automaticamente envia como argumento o valor atual da barra que foi ajustada. Por esse motivo, a função <code>on_trackbar()</code> possui um argumento (<code>val</code>), mas este não é utilizado em seu interior, uma vez que optamos por usar a mesma função de <em>callback</em> para todas as três barras. Como alternativa, coletamos a posição atual de todos os <em>sliders</em> localmente, utilizando a função <code>cv2.getTrackbarPos()</code> sempre que há alteração.</p>
+</div>
+<div class="listingblock data-line-432">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def on_trackbar(val):
+    global img_final
+
+    slider_altura = cv2.getTrackbarPos('altura', 'Tiltshift')  # altura da região central
+    slider_centro = cv2.getTrackbarPos('centro', 'Tiltshift')  # posição vertical do centro
+    slider_decaimento = cv2.getTrackbarPos('decaimento', 'Tiltshift')
+
+    l1 = slider_centro - int(slider_altura/2)
+    l2 = slider_centro + int(slider_altura/2)
+
+    if l1 &gt;= 0 and l2 &lt;= 100:
+        l1 = l1*height/100
+        l2 = l2*height/100
+    else:
+        return
+
+    aux = img1.copy()
+
+    x = np.arange(height, dtype=np.float32)
+
+    alpha = 0.5 * (np.tanh((x - l1)/(slider_decaimento+0.001)) - np.tanh((x - l2)/(slider_decaimento+0.001)))
+
+    for i, element in enumerate(alpha):
+        aux[i] = cv2.addWeighted(img1[i], element, img2[i], 1 - element, 0.0)
+
+    cv2.imshow('Tiltshift', aux)
+    img_final = aux</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-462">
+<p>Para simular o efeito do <em>tilt-shift</em>, fazemos uma soma ponderada entre a imagem e sua versão borrada por meio da função <code>cv2.addWeighted()</code>. Esse processo pode ser modelado por uma função que define a região de desfoque ao longo do eixo vertical da imagem:</p>
+</div>
+<div class="stemblock data-line-465">
+<div class="content">
+\[\alpha(x) = \frac{1}{2}\left(\tanh{\frac{x-l_1}{d}}-\tanh{\frac{x-l_2}{d}} \right)\]
+</div>
+</div>
+<div class="paragraph data-line-469">
+<p>em que \(x\) representa as linhas da imagem, \(l_1\) e \(l_2\) são os limites verticais para a região sem borramento cujo \(\alpha\) assume valor em torno de 0.5 e \(d\) indica a força do decaimento da região normal para a região borrada.</p>
+</div>
+<div class="paragraph data-line-471">
+<p>Para evitar o erro de divisão por zero, foi acrescido ao decaimento um valor de 0.001. Além disso, antes de atribuir os novos parâmetros, verificamos se os valores de altura da região sem borramento e o centro determinado são compatíveis para que o tamanho da imagem não seja excedido.</p>
+</div>
+<div class="paragraph data-line-473">
+<p>Ao final, exibimos na janela o resultado dessa combinação linear e o armazenamos na variável global <code>img_final</code>, a fim de disponibilizar a imagem atual para ser salva em arquivo pelo comando <em>s</em>.</p>
+</div>
+<div class="paragraph data-line-475">
+<p>Para verificar o funcionamento do código, utilizamos a imagem abaixo como entrada do programa.</p>
+</div>
+<div class="imageblock data-line-478">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/cidade.jpg?raw=true" alt="cidade">
+</div>
+<div class="title">Figure 18. Imagem de entrada para o <em>tilt-shift</em></div>
+</div>
+<div class="paragraph data-line-480">
+<p>Ao realizarmos o ajuste das barras (altura: 70; centro: 48; decaimento: 22), chegamos no resultado apresentado na Figura 19.</p>
+</div>
+<div class="imageblock data-line-483">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/img_tiltshift.png?raw=true" alt="img tiltshift">
+</div>
+<div class="title">Figure 19. Imagem de saída para o <em>tilt-shift</em></div>
+</div>
+<div class="paragraph data-line-485">
 <p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/tiltshift.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/tiltshift.py">tiltshift.py</a>.</p>
 </div>
 </div>
-<div class="sect3 data-line-328">
+<div class="sect3 data-line-487">
 <h4 id="_6_1_2_tilt_shift_em_vídeo">6.1.2 <em>Tilt-shift</em> em vídeo</h4>
-<div class="ulist data-line-329">
+<div class="ulist data-line-488">
 <ul>
-<li class="data-line-329">
+<li class="data-line-488">
 <p>Implementar um programa capaz de processar um arquivo de vídeo, produzir o efeito de <em>tilt-shift</em> nos quadros presentes e escrever o resultado em outro arquivo de vídeo. A ideia é criar um efeito de miniaturização de cenas. Descarte quadros em uma taxa que julgar conveniente para evidenciar o efeito de <em>stop motion</em>, comum em vídeos desse tipo.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph data-line-331">
-<p><em>Em construção&#8230;&#8203;</em></p>
+<div class="paragraph data-line-490">
+<p>Este caso é uma aplicação do exemplo acima, em que cada quadro do vídeo é processado como realizado anteriormente e alguns quadros são descartados para criar um efeito de <em>stop motion</em>.</p>
 </div>
-<div class="paragraph data-line-333">
+<div class="paragraph data-line-492">
+<p>O vídeo utilizado para exemplificação está disposto abaixo.</p>
+</div>
+<div class="videoblock data-line-495">
+<div class="title">Vídeo original</div>
+<div class="content">
+<video src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/videos/video.mp4?raw=true" controls>
+Your browser does not support the video tag.
+</video>
+</div>
+</div>
+<div class="paragraph data-line-497">
+<p>O algoritmo usará os parâmetros de ajuste que são fornecidos pelo usuário através da mudança das barras de rolagem para calcular os valores de \(\alpha\), que é um vetor do tamanho da imagem. Esse efeito, que a princípio é gerado no frame inicial, repercutirá por todos os frames restantes compondo o vídeo final.</p>
+</div>
+<div class="listingblock data-line-500">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">cap = cv2.VideoCapture(arq_video)
+
+# lê primeiro frame para ajustar parâmetros do tilt-shift
+ret, frame1 = cap.read()</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-507">
+<p>Como o mesmo efeito será aplicado para todos os frames do vídeo, uma vez definida a configuração, não será necessário recalcular os parâmetros. Por esse motivo, tratamos o vetor \(\alpha\) como uma variável global que será constantemente atualizada pela função de <em>callback</em> das barras para, enfim, ser utilizada dentro da função <code>tiltshift()</code> repetidas vezes durante a criação do vídeo.</p>
+</div>
+<div class="paragraph data-line-509">
+<p>Essa função recebe como argumento o frame original e o frame borrado e retorna a imagem com o efeito do <em>tilt-shift</em> aplicado. O seu algoritmo segue a mesma lógica que o exercício anterior.</p>
+</div>
+<div class="listingblock data-line-512">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def tiltshift(frame1, frame2):
+    img = frame1.copy()
+
+    for i, element in enumerate(alpha):
+        img[i] = cv2.addWeighted(
+            frame1[i], element, frame2[i], 1 - element, 0.0)
+
+    return img</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-523">
+<p>Como requisito do programa, a função <code>salvarvideo()</code> grava o resultado do efeito aplicado no vídeo. O objetivo da função <code>cv2.VideoWriter()</code> é, portanto, salvar o vídeo final em arquivo, definindo o nome (<code>video_tiltshift.mp4</code>), extensão, taxa de frames por segundo e as dimensões do vídeo (iguais ao original).</p>
+</div>
+<div class="paragraph data-line-525">
+<p>Para criar o efeito de <em>stop motion</em>, uma condição <code>descarta</code> é imposta e a variável <code>taxa</code> determinará esse descarte. Nesse processo, os frames que são múltiplos do valor armazenado em <code>taxa</code> devem ser mantidos, ou seja, a cada 8 frames do vídeo original, extraímos 1 frame para o vídeo final.</p>
+</div>
+<div class="listingblock data-line-528">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def salvarvideo(video):
+    taxa = 8
+    descarta = 0
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter('video_tiltshift.mp4', fourcc, 15, (width, height))
+
+    cap = cv2.VideoCapture(video)
+
+    while True:
+        ret, frame1 = cap.read()
+        if ret:
+            if descarta == 0:
+                frame2 = frame1.copy()
+
+                # aplica borramento
+                frame_32f = np.float32(frame2)
+                for _ in range(5):
+                    frame_32f = cv2.filter2D(frame_32f, -1, mask)
+                frame2 = np.uint8(frame_32f)
+
+                novo_frame = tiltshift(frame1, frame2)
+                out.write(novo_frame)
+
+                descarta += 1
+                descarta = descarta % taxa
+            else:
+                descarta += 1
+                descarta = descarta % taxa
+        else:
+            break
+
+    out.release()
+    print("Vídeo salvo como video_tiltshift.mp4")</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-565">
+<p>Quando o usuário concluir a sua configuração, ele pode pressionar a tecla <em>s</em> para salvar o resultado no arquivo de vídeo <code>video_tiltshift.mp4</code>.</p>
+</div>
+<div class="listingblock data-line-568">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">k = cv2.waitKey(0)
+if k == 27:
+    cv2.destroyAllWindows()
+elif k == ord('s'):
+    salvarvideo(arq_video)
+    cv2.destroyAllWindows()</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-577">
+<p>O resultado do efeito <em>tilt-shift</em> no vídeo mostrado previamente pode ser visualizado abaixo.</p>
+</div>
+<div class="imageblock data-line-580">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/video_tiltshift.gif?raw=true" alt="video tiltshift">
+</div>
+<div class="title">Figure 20. Vídeo resultante com <em>tilt-shift</em></div>
+</div>
+<div class="paragraph data-line-582">
 <p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/tiltshiftvideo.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/tiltshiftvideo.py">tiltshiftvideo.py</a>.</p>
 </div>
 </div>
@@ -988,7 +1287,7 @@ cv2.normalize(hist_atual, hist_atual, alpha=0, beta=hist_h, norm_type=cv2.NORM_M
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-22 20:51:38 -0300
+Last updated 2022-05-28 21:34:15 -0300
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
