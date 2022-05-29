@@ -18,8 +18,7 @@ def on_trackbar(val):
         return
 
     aux = img1.copy()
-    cv2.rectangle(aux, (0, int(l1)), (width, int(l2)), (0, 0, 0), 2)
-
+    
     x = np.arange(height, dtype=np.float32)
 
     alpha = 0.5 * (np.tanh((x - l1)/(slider_decaimento+0.001)) - np.tanh((x - l2)/(slider_decaimento+0.001)))
