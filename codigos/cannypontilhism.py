@@ -28,6 +28,7 @@ def pontilhismo(image):
 
 
 def on_trackbar_canny(slider):
+    global img_final
     img_final = pontos.copy()
 
     for n in range(4, 0, -1):
@@ -42,8 +43,6 @@ def on_trackbar_canny(slider):
 
     cv2.imshow('canny', img_final)
 
-
-global img, pontos, img_final
 
 arquivo = 'jardim.jpg'
 img = cv2.imread(arquivo, cv2.IMREAD_COLOR)
