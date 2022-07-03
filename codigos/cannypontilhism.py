@@ -52,7 +52,7 @@ def on_trackbar_canny(slider):
 
 arquivo = 'jardim.jpg'
 img = cv2.imread(arquivo, cv2.IMREAD_COLOR)
-img = cv2.resize(img, (700, 440))
+img = cv2.resize(img, (600, 420))
 
 if not img.data:
     print('Erro ao abrir a imagem.')
@@ -61,7 +61,7 @@ if not img.data:
 pontos = pontilhismo(img)
 
 cv2.namedWindow('canny')
-cv2.createTrackbar('threshold', 'canny', 0, 200, on_trackbar_canny)
+cv2.createTrackbar('threshold', 'canny', 0, 100, on_trackbar_canny)
 on_trackbar_canny(0)
 
 k = cv2.waitKey(0)
