@@ -484,6 +484,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#_2ª_unidade">2ª Unidade</a>
+<ul class="sectlevel2">
+<li><a href="#_7_2_exercícios">7.2. Exercícios</a>
+<ul class="sectlevel3">
+<li><a href="#_7_2_1_filtro_homomórfico">7.2.1 Filtro homomórfico</a></li>
+</ul>
+</li>
+<li><a href="#_8_3_exercícios">8.3 Exercícios</a>
+<ul class="sectlevel3">
+<li><a href="#_8_3_1_pontilhismo">8.3.1 Pontilhismo</a></li>
+</ul>
+</li>
+<li><a href="#_9_2_exercícios">9.2 Exercícios</a>
+<ul class="sectlevel3">
+<li><a href="#_9_2_1_clusterização_com_k_means">9.2.1 Clusterização com <em>k-means</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1284,10 +1303,320 @@ elif k == ord('s'):
 </div>
 </div>
 </div>
+<div class="sect1 data-line-584">
+<h2 id="_2ª_unidade">2ª Unidade</h2>
+<div class="sectionbody">
+<div class="sect2 data-line-586">
+<h3 id="_7_2_exercícios">7.2. Exercícios</h3>
+<div class="sect3 data-line-588">
+<h4 id="_7_2_1_filtro_homomórfico">7.2.1 Filtro homomórfico</h4>
+<div class="ulist data-line-589">
+<ul>
+<li class="data-line-589">
+<p>Utilizando o programa <a href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/dft.cpp" data-href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/dft.cpp">dft.cpp</a> como referência, implementar o filtro homomórfico para melhorar imagens com iluminação irregular. Assumindo que a imagem fornecida é em tons de cinza, crie uma cena mal iluminada e ajuste os parâmetros do filtro homomórfico para corrigir a iluminação da melhor forma possível.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph data-line-591">
+<p>Neste exercício, resolveremos problemas de distribuição irregular de iluminação em imagens utilizando o filtro homomórfico.</p>
+</div>
+<div class="paragraph data-line-593">
+<p>O filtro homomórfico é uma versão modificada do filtro gaussiano e atua sobre as componentes de reflectância e iluminância da imagem, a partir da seguinte equação matemática:</p>
+</div>
+<div class="stemblock data-line-596">
+<div class="content">
+\[H(u,v)=(\gamma _{H}-\gamma _{L})(1-e^{-c(D^{2}(u,v)/D_{0}^{2})})+\gamma _{L}\]
+</div>
+</div>
+<div class="paragraph data-line-600">
+<p>Os parâmetros do filtro (\(\gamma_{H}\), \(\gamma_{L}\), \(D_{0}\) e \(c\)) são ajustados pelo usuário a fim atingir o resultado desejado: reduzir os efeitos causados pela má iluminação na imagem original. O algoritmo implementado segue os passos descritos a seguir.</p>
+</div>
+<div class="paragraph data-line-602">
+<p>Primeiramente, realiza-se o <em>padding</em> da imagem e aplica-se a transformada de Fourier, transferindo a análise para o domínio da frequência.</p>
+</div>
+<div class="paragraph data-line-604">
+<p>Em seguida, desloca-se o centro do seu espectro, invertendo os quadrantes da imagem (A↔D, B↔C) por meio da função <code>deslocaDFT()</code>.</p>
+</div>
+<div class="listingblock data-line-607">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def deslocaDFT(image):
+    # se a imagem tiver tamanho ímpar, recorta a regiao para evitar cópias de tamanho desigual
+    image = image[0:(image.shape[0] &amp; -2), 0:(image.shape[1] &amp; -2)]
+
+    cy = int(image.shape[0] / 2)
+    cx = int(image.shape[1] / 2)
+
+    # reorganiza os quadrantes da transformada
+    # A B   -&gt;  D C
+    # C D       B A
+    A = image[:cy, :cx].copy()
+    B = image[:cy, cx:].copy()
+    C = image[cy:, :cx].copy()
+    D = image[cy:, cx:].copy()
+
+    # A &lt;-&gt; D
+    image[:cy, :cx] = D
+    image[cy:, cx:] = A
+
+    # C &lt;-&gt; B
+    image[:cy, cx:] = C
+    image[cy:, :cx] = B
+
+    return image</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-634">
+<p>Na sequência, multiplica-se a função na frequência pelo filtro (\(G(u,v) = H(u,v)F(u,v)\)) e retoma-se a configuração original dos quadrantes da imagem invertendo nocamente os quadrantes.</p>
+</div>
+<div class="paragraph data-line-636">
+<p>Finalmente, calcula-se a transformada inversa do produto e extrai-se a parte real da imagem no domínio espacial.</p>
+</div>
+<div class="paragraph data-line-638">
+<p>Detendo-se ao filtro em si, definimos a função <code>filtro_homomorfico()</code> que implementará o equacionamento matemático. Como comentado anteriormente, o algoritmo usará os parâmetros do filtro, os quais são fornecidos pelo usuário através do controle das barras deslizantes, que variam de 0 a 100.</p>
+</div>
+<div class="listingblock data-line-641">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def filtro_homomorfico():
+    gammaH = cv2.getTrackbarPos('gama H', 'filtro homomorfico') / 100
+    gammaL = cv2.getTrackbarPos('gama L', 'filtro homomorfico') / 100
+    D0 = cv2.getTrackbarPos('D0', 'filtro homomorfico')
+    c = cv2.getTrackbarPos('c', 'filtro homomorfico') / 10</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-649">
+<p>A variável <code>tmp</code> corresponde à matriz temporária utilizada para criar as componentes real e imaginária do filtro. Com isso, define-se <em>D(u,v)</em> e implemeta-se o filtro, exibindo o resultado em janela. Enfim, cria-se a matriz com as componentes do filtro e combina ambas em uma matriz multicanal complexa.</p>
+</div>
+<div class="listingblock data-line-652">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">    tmp = np.zeros((dft_M, dft_N), dtype=np.float32)
+    v = np.array(range(dft_N))
+
+    for u in range(dft_M):
+        D = np.sqrt((u-dft_M/2)**2 + (v-dft_N/2)**2)
+        tmp[u] = (gammaH-gammaL)*(1-np.exp(-c*(D**2)/(0.0001+D0**2))) + gammaL
+
+    cv2.imshow('filtro', tmp)
+
+    comps = [tmp, tmp]
+    filtro_h = cv2.merge(comps)
+
+    return filtro_h</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-668">
+<p>Para exemplificar, foi gerado um filtro com os seguintes parâmetros: \(\gamma_{H}=89\), \(\gamma_{L}=35\), \(D_{0}=70\) e \(c=96\), obtendo o resultando abaixo. Verifica-se que este facilita a passagem de componentes de frequências mais altas (reflectância) em detrimento das frequências mais baixas (iluminância).</p>
+</div>
+<div class="imageblock data-line-671">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/filtro_h.png?raw=true" alt="filtro h">
+</div>
+<div class="title">Figure 21. Filtro homomórfico gerado pelos parâmetros de entrada</div>
+</div>
+<div class="paragraph data-line-673">
+<p>A imagem original utilizada de teste é apresentada na Figura 22. Em seguida, é mostrada a imagem após a realização da filtragem homomórfica.</p>
+</div>
+<div class="imageblock data-line-676">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/entrada_homomorfico.png?raw=true" alt="entrada homomorfico">
+</div>
+<div class="title">Figure 22. Imagem original com problema de iluminação</div>
+</div>
+<div class="imageblock data-line-679">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/foto_corrigida.png?raw=true" alt="foto corrigida">
+</div>
+<div class="title">Figure 23. Imagem com parâmetros do filtro homomórfico aplicados</div>
+</div>
+<div class="paragraph data-line-681">
+<p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/homomorfico.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/homomorfico.py">homomorfico.py</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2 data-line-683">
+<h3 id="_8_3_exercícios">8.3 Exercícios</h3>
+<div class="sect3 data-line-685">
+<h4 id="_8_3_1_pontilhismo">8.3.1 Pontilhismo</h4>
+<div class="ulist data-line-687">
+<ul>
+<li class="data-line-687">
+<p>Utilizando os programas <a href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/canny.cpp" data-href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/canny.cpp">canny.cpp</a> e <a href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/pontilhismo.cpp" data-href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/pontilhismo.cpp">pontilhismo.cpp</a> como referência, implemente um programa cannypoints.cpp. A ideia é usar as bordas produzidas pelo algoritmo de Canny para melhorar a qualidade da imagem pontilhista gerada. A forma como a informação de borda será usada é livre. Entretanto, são apresentadas algumas sugestões de técnicas que poderiam ser utilizadas:</p>
+<div class="ulist data-line-688">
+<ul>
+<li class="data-line-688">
+<p>Desenhar pontos grandes na imagem pontilhista básica;</p>
+</li>
+<li class="data-line-689">
+<p>Usar a posição dos pixels de borda encontrados pelo algoritmo de Canny para desenhar pontos nos respectivos locais na imagem gerada.</p>
+</li>
+<li class="data-line-690">
+<p>Experimente ir aumentando os limiares do algoritmo de Canny e, para cada novo par de limiares, desenhar círculos cada vez menores nas posições encontradas. A Figura 19 foi desenvolvida usando essa técnica.</p>
+</li>
+</ul>
+</div>
+</li>
+<li class="data-line-691">
+<p>Escolha uma imagem de seu gosto e aplique a técnica que você desenvolveu.</p>
+</li>
+<li class="data-line-692">
+<p>Descreva no seu relatório detalhes do procedimento usado para criar sua técnica pontilhista.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph data-line-694">
+<p>Neste programa, iremos simular a técnica do pontilhismo desenhando digitalmente pequenos círculos na imagem escolhida. Estes círculos serão separados por pequenos intervalos e deslocados de seu centro de forma randômica.</p>
+</div>
+<div class="paragraph data-line-696">
+<p>Inicialmente, definiremos a função <code>pontilhismo()</code> para aplicação da técnica desejada. As variáveis <code>STEP</code>, <code>JITTER</code> e <code>RAIO</code> são determinadas de antemão. Detalhando melhor esses parâmetros, temos que <code>STEP</code> define o passo usado para varrer a imagem de referência, <code>JITTER</code> regula o intevalo de separação (espalhamento) dos elementos e <code>RAIO</code> corresponde a distância entre um ponto de cada círculo gerado e seu centro.</p>
+</div>
+<div class="paragraph data-line-698">
+<p><code>xrange</code> e <code>yrange</code> são <em>arrays</em> de índices que armazenam as coordenadas dos pontos em que vão ser colocados os círculos do pontilhismo, preenchidos com valores sequenciais iniciando em 0, além de receberem um ganho igual a <code>STEP</code> e um deslocamento <code>STEP//2</code>.</p>
+</div>
+<div class="listingblock data-line-701">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def pontilhismo(image):
+    STEP = 4
+    JITTER = 4
+    RAIO = 3
+
+    points = image.copy()
+    rows, cols = image.shape[:-1]
+
+    xrange = np.arange(0, rows-STEP, STEP) + STEP//2
+    yrange = np.arange(0, cols-STEP, STEP) + STEP//2
+
+    np.random.shuffle(xrange)
+
+    for i in xrange:
+        np.random.shuffle(yrange)
+        for j in yrange:
+            x = i + np.random.randint(2*JITTER) - JITTER + 1
+            y = j + np.random.randint(2*JITTER) - JITTER + 1
+            color = tuple(map(int, image[x, y]))
+            points = cv2.circle(points, (y, x), RAIO, color, -1, lineType=cv2.LINE_AA)
+    return</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-725">
+<p>Após embaralhar aleatoriamente os pontos através da função <code>random.shuffle()</code>, os <em>loops</em> mostrados acima fazem com que as variáveis <code>i</code> e <code>j</code> assumam, a cada iteração, os valores dos arrays <code>xrange</code> e <code>yrange</code> de forma consecutiva.</p>
+</div>
+<div class="paragraph data-line-727">
+<p>A imagem que será utilizada para aplicação da técnica de pontilhismo é mostrada abaixo:</p>
+</div>
+<div class="imageblock data-line-730">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/jardim.png?raw=true" alt="jardim">
+</div>
+<div class="title">Figure 24. Imagem original</div>
+</div>
+<div class="paragraph data-line-732">
+<p>Para melhorar a qualidade das imagens que geraremos com a técnica do pontilhismo, podemos utilizar a detecção de bordas de Canny. O algoritmo de Canny é um dos mais rápidos e eficientes algoritmos de detecção de bordas ou descontinuidades. A saída desse algoritmo é uma imagem binária em que todas as bordas são representadas com valor 255 (branco) e os demais pixels com valor 0 (preto).</p>
+</div>
+<div class="paragraph data-line-734">
+<p>A <em>trackbar</em> está associada à função <code>on_trackbar_canny()</code>. Nessa função, são gerados círculos a partir dos pixels de borda detectados, de modo a evidenciar os contornos. Com isso, denota-se que o limiar \(T_2\) empregado é determinado pelo usuário a partir da interação com o <em>slider</em>, enquanto o \(T_1\) é obtido considerando a proporção de 3:1.</p>
+</div>
+<div class="listingblock data-line-737">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def on_trackbar_canny(slider):
+    global img_final
+    img_final = pontos.copy()
+
+    for raio in [4,3,2,1]:
+        fator = (5-raio)/2
+        bordas = cv2.Canny(img, fator*slider, 3*fator*slider)
+
+        px, py = np.where(bordas == 255)
+
+        for i in range(0, len(px), 2):
+            x, y = px[i], py[i]
+            color = tuple(map(int, img[x, y]))
+            img_final = cv2.circle(img_final, (y, x), raio, color, -1, lineType=cv2.LINE_AA)
+
+    cv2.imshow('canny', img_final)</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-756">
+<p>O processo é repetido quatro vezes e, à medida em que aumentam-se os limiares, são criados círculos menores. Para impedir a repetição excessiva, os círculos são desenhados alternadamente sobre os pontos que compõem as bordas da imagem, evitando os pontos consecutivos.</p>
+</div>
+<div class="paragraph data-line-758">
+<p>Após aplicação, os resultados com variação de <em>threshold</em> podem ser observados abaixo:</p>
+</div>
+<div class="imageblock data-line-761">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/jardim_pontilhismo.gif?raw=true" alt="jardim pontilhismo">
+</div>
+<div class="title">Figure 25. Resultado com variação de threshold</div>
+</div>
+<div class="paragraph data-line-763">
+<p>A seguir, visualizamos outro teste realizado e a imagem aplicada a técnica de pontilhismo, com <em>threshold</em> de 20.</p>
+</div>
+<div class="imageblock data-line-766">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/outono_pontilhismo.png?raw=true" alt="outono pontilhismo">
+</div>
+<div class="title">Figure 26. Entrada e saída do programa utilizando threshold de 20</div>
+</div>
+<div class="paragraph data-line-768">
+<p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/cannypontilhism.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/cannypontilhism.py">cannypontilhism.py</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2 data-line-770">
+<h3 id="_9_2_exercícios">9.2 Exercícios</h3>
+<div class="sect3 data-line-772">
+<h4 id="_9_2_1_clusterização_com_k_means">9.2.1 Clusterização com <em>k-means</em></h4>
+<div class="ulist data-line-774">
+<ul>
+<li class="data-line-774">
+<p>Utilizando o programa <a href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/kmeans.cpp" data-href="https://agostinhobritojr.github.io/tutorial/pdi/exemplos/kmeans.cpp">kmeans.cpp</a> como exemplo, prepare um programa exemplo onde a execução do código se dê usando o parâmetro nRodadas=1 e inciar os centros de forma aleatória usando o parâmetro KMEANS_RANDOM_CENTERS ao invés de KMEANS_PP_CENTERS. Realize 10 rodadas diferentes do algoritmo e compare as imagens produzidas. Explique porque elas podem diferir tanto.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph data-line-776">
+<p>O <em>k-means</em> é um processo de quantização que visa classificar <em>N</em> observações em <em>K</em> aglomerados. É um processo iterativo em que extrai-se a distância média das amostras em cada aglomerado, redefinindo as posições dos centroides a cada passo. Esse processo acontece até não termos mais mudanças significativas nas posições dos centroides.</p>
+</div>
+<div class="paragraph data-line-778">
+<p>No programa em questão, implementaremos o procedimento descrito acima começando com centroides aleatoriamente determinados, devido à escolha do parâmetro <code>KMEANS_RANDOM_CENTERS</code>. Definido na variável <code>criteria</code>, o critério de parada se dá ao atingir o número máximo de 10000 iterações ou o erro \(\epsilon\) de valor 0,0001.</p>
+</div>
+<div class="listingblock data-line-781">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_MAX_ITER, 10000, 0.0001)
+
+for n in range(1, 11):
+    _, rotulos, centros = cv2.kmeans(samples, nClusters, None, criteria, nRodadas, cv2.KMEANS_RANDOM_CENTERS)
+
+    centros = np.uint8(centros)
+
+    rotulada = np.zeros(img.shape, dtype=img.dtype)
+    for y in range(rows):
+        for x in range(cols):
+            indice = rotulos[y + x*rows, 0]
+            for z in range(3):
+                rotulada[y, x][z] = centros[indice][z]</code></pre>
+</div>
+</div>
+<div class="paragraph data-line-797">
+<p>Conforme solicitado, o algoritmo é rodado dez vezes, gerando dez imagens distintas. Como os centros dos agrupamentos são escolhidos, inicialmente, de forma aleatória, esses pontos mudarão a cada rodada, promovendo imagens relativamente diferentes. Isto ocorre devido à natureza não determinística do método <em>k-means</em>, a qual pode levar a diferentes valores de convergência de acordo com os pontos de partida ou, em alguns casos, sequer encontrar uma convergência.</p>
+</div>
+<div class="paragraph data-line-799">
+<p>As imagens geradas a partir da Figura 24 foram aglomeradas em um arquivo <em>.gif</em>, a fim de compararmos os resultados obtidos em cada iteração.</p>
+</div>
+<div class="imageblock data-line-802">
+<div class="content">
+<img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/clustered_img.gif?raw=true" alt="clustered img">
+</div>
+<div class="title">Figure 27. Imagens clusterizadas</div>
+</div>
+<div class="paragraph data-line-804">
+<p>O código completo pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/kmeans.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/kmeans.py">kmeans.py</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-28 21:34:15 -0300
+Last updated 2022-07-03 18:05:32 -0300
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
