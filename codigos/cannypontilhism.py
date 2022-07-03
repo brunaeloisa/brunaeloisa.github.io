@@ -31,15 +31,21 @@ def on_trackbar_canny(slider):
     global img_final
     img_final = pontos.copy()
 
-    for n in range(4, 0, -1):
-        bordas = cv2.Canny(img, (5-n)*slider, (5-n)*slider)
 
-        x, y = np.where(bordas == 255)
+def on_trackbar_canny(slider):
+    global img_final
+    img_final = pontos.copy()
 
-        for i in range(len(x)):
-            color = tuple(map(int, img[x[i], y[i]]))
+    for raio in [4, 3, 2, 1]:
+        fator = (5-raio)/2
+        bordas = cv2.Canny(img, fator*slider, 3*fator*slider)
+        px, py = np.where(bordas == 255)
+
+        for i in range(0, len(px), 2):
+            x, y = px[i], py[i]
+            color = tuple(map(int, img[x, y]))
             img_final = cv2.circle(
-                img_final, (y[i], x[i]), n, color, -1, lineType=cv2.LINE_AA)
+                img_final, (y, x), raio, color, -1, lineType=cv2.LINE_AA)
 
     cv2.imshow('canny', img_final)
 
