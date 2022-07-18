@@ -172,4 +172,3 @@ while True:
         cv2.imwrite('scanned_color.png', scanned_color)
         cv2.imwrite('scanned_bin.png', scanned_bin)
         write_file('img_text.txt')
-        break
