@@ -43,11 +43,6 @@ def sort_points(pts):
 
 def write_file(filename):
     text = pytesseract.image_to_string(scanned_bin)
-
-    file = open('original_txt.txt', 'w', encoding='utf-8')
-    file.write(text)
-    file.close()
-
     text = text.replace('\n\n', '^\n')
     split_text = text.split('\n')
 
@@ -158,8 +153,7 @@ while True:
         scanned_gray = cv2.GaussianBlur(scanned_gray, (5, 5), 1)
 
         # aplica threshold adaptativo
-        adapt_threshold = cv2.adaptiveThreshold(
-            scanned_gray, 255, 1, 1, 7, 2)
+        adapt_threshold = cv2.adaptiveThreshold(scanned_gray, 255, 1, 1, 7, 2)
 
         # faz o negativo da imagem
         scanned_bin = cv2.bitwise_not(adapt_threshold)
