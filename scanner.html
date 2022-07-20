@@ -683,49 +683,62 @@ elif key == ord('s'):
 </div>
 </div>
 <div class="paragraph data-line-203">
-<p>Já ao pressionar a tecla <code>s</code>, a imagem é salva na escala colorida e em tons de cinza, além de ser exportado o texto escrito e editável em um arquivo <em>.txt</em>, com auxílio da função <code>write_file()</code>. Nela, obtém-se o texto da imagem por meio da função <code>pytesseract.image_to_string()</code> e são realizados alguns tratamentos para retirar o excesso de quebras de linha e corrigir o reconhecimento indevido de caracteres.</p>
+<p>Já ao pressionar a tecla <code>s</code>, a imagem é salva na escala colorida e em tons de cinza, além de ser exportado o texto escrito e editável em um arquivo <em>.txt</em>, com auxílio da função <code>write_file()</code>. Nela, obtém-se o texto da imagem por meio da função <code>pytesseract.image_to_string()</code> e são realizados alguns tratamentos para retirar o excesso de quebras de linha e corrigir o reconhecimento indevido de alguns caracteres.</p>
 </div>
 <div class="listingblock data-line-206">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def write_file(filename):
+    def write_file(filename):
     text = pytesseract.image_to_string(scanned_bin)
     text = text.replace('\n\n', '^\n')
     split_text = text.split('\n')
 
-    i = 0
-    for line in split_text:
+    for i, line in enumerate(split_text):
         if line[-1:] == '.':
             line = line + '\n\n'
-        elif line[-1:] == '-':
-            line = line[:-1] + ' '
-        elif line[-1:].isalpha() or line[-1:] == ',' or line[-1:] == ';':
+        elif line[-1:].isalpha() or line[-1:] in [',', '-']:
             line = line + ' '
-        elif line[-1:] == ':':
+        elif line[-1:] in [':', ';']:
             line = line + '\n'
         split_text[i] = line
-        i += 1
 
     new_text = ''.join(split_text)
     new_text = new_text.replace('^', '\n\n')
+
+    split_text = new_text.split('.')
+
+    for i in range(len(split_text)-1):
+        if len(split_text[i+1]) == 0:
+            split_text[i+1] = '..'
+        if len(split_text[i+1]) &gt;= 1:
+            if split_text[i][-1:].islower() and split_text[i+1][0].islower() :
+                split_text[i] = split_text[i] + ' '
+            elif split_text[i][-1:].isnumeric() and split_text[i+1][0].isnumeric():
+                split_text[i] = split_text[i] + '.'
+        if len(split_text[i+1]) &gt;= 2:
+            if (split_text[i+1][0] == ' ' and split_text[i+1][1].isupper()) or split_text[i+1][:1] == '\n':
+                split_text[i] = split_text[i] + '.'
+
+    new_text = ''.join(split_text)
 
     file = open(filename, 'w', encoding='utf-8')
     file.write(new_text)
     file.close()</code></pre>
 </div>
 </div>
-<div class="paragraph data-line-233">
+<div class="paragraph data-line-246">
 <p>O resultado do texto teste extraído para um arquivo editável pode ser acessado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/imagens/projeto/img_text.txt" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/imagens/projeto/img_text.txt">img_text.txt</a>.</p>
 </div>
-<div class="paragraph data-line-235">
+<div class="paragraph data-line-248">
 <p>Visualizamos a seguir a captura de texto atráves de uma câmera em tempo real:</p>
 </div>
-<div class="imageblock data-line-238">
+<div class="imageblock data-line-251">
 <div class="content">
 <img src="https://github.com/brunaeloisa/brunaeloisa.github.io/blob/main/imagens/resultados/teste_scanner.gif?raw=true" alt="teste scanner">
 </div>
 <div class="title">Figure 6. Implementação do Scanner Inteligente em câmera</div>
 </div>
-<div class="paragraph data-line-240">
+<div class="paragraph data-line-253">
 <p>O código completo referente a este projeto pode ser encontrado em: <a href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/scanner.py" data-href="https://raw.githubusercontent.com/brunaeloisa/brunaeloisa.github.io/main/codigos/scanner.py">scanner.py</a>.</p>
 </div>
 </div>
@@ -733,7 +746,7 @@ elif key == ord('s'):
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-07-18 01:41:45 -0300
+Last updated 2022-07-20 11:37:15 -0300
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
