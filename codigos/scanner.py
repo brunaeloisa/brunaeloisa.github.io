@@ -46,21 +46,33 @@ def write_file(filename):
     text = text.replace('\n\n', '^\n')
     split_text = text.split('\n')
 
-    i = 0
-    for line in split_text:
+    for i, line in enumerate(split_text):
         if line[-1:] == '.':
             line = line + '\n\n'
-        elif line[-1:] == '-':
-            line = line[:-1] + ' '
-        elif line[-1:].isalpha() or line[-1:] == ',' or line[-1:] == ';':
+        elif line[-1:].isalpha() or line[-1:] in [',', '-']:
             line = line + ' '
-        elif line[-1:] == ':':
+        elif line[-1:] in [':', ';']:
             line = line + '\n'
         split_text[i] = line
-        i+=1
 
     new_text = ''.join(split_text)
     new_text = new_text.replace('^', '\n\n')
+
+    split_text = new_text.split('.')
+
+    for i in range(len(split_text)-1):
+        if len(split_text[i+1]) == 0:
+            split_text[i+1] = '..'
+        if len(split_text[i+1]) >= 1:
+            if split_text[i][-1:].islower() and split_text[i+1][0].islower() :
+                split_text[i] = split_text[i] + ' '
+            elif split_text[i][-1:].isnumeric() and split_text[i+1][0].isnumeric():
+                split_text[i] = split_text[i] + '.'
+        if len(split_text[i+1]) >= 2:
+            if (split_text[i+1][0] == ' ' and split_text[i+1][1].isupper()) or split_text[i+1][:1] == '\n':
+                split_text[i] = split_text[i] + '.'
+
+    new_text = ''.join(split_text)
 
     file = open(filename, 'w', encoding='utf-8')
     file.write(new_text)
@@ -127,8 +139,7 @@ while True:
         bordas = cv2.morphologyEx(bordas, cv2.MORPH_CLOSE, element)
 
         # procura por contornos externos
-        contours, _ = cv2.findContours(
-            bordas, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(bordas, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # identifica o contorno que delimita o papel
         paper = find_paper(contours)
@@ -172,3 +183,4 @@ while True:
         cv2.imwrite('scanned_color.png', scanned_color)
         cv2.imwrite('scanned_bin.png', scanned_bin)
         write_file('img_text.txt')
+        print('Arquivos salvos!')
